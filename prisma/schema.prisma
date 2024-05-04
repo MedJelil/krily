@@ -12,3 +12,30 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Admin {
+  id          Int    @id @default(autoincrement())
+  name        String
+  phoneNumber String @unique
+  password    String
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  name        String
+  phoneNumber String   @unique
+  password    String
+  status      Status   @default(NOT_VERIFIED)
+  image_url   String
+  permis      String
+  identity    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Status {
+  VERIFIED
+  IN_PROGRESS
+  NOT_VERIFIED
+  BLOCKED
+}
