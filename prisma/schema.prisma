@@ -48,12 +48,12 @@ model Rental {
 }
 
 model Car {
-  id             Int      @id @default(autoincrement())
+  id             Int           @id @default(autoincrement())
   model          String
   brand          String
   gearBox        String
   fuel           String
-  status         Status   @default(NOT_VERIFIED)
+  status         Status        @default(NOT_VERIFIED)
   main_image_url String
   image1_url     String
   image2_url     String
@@ -62,26 +62,32 @@ model Car {
   year           Int
   daily_price    Float
   rentalId       Int
-  rental         Rental   @relation(fields: [rentalId], references: [id])
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  rental         Rental        @relation(fields: [rentalId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  rentedCars     RentedCar[]
+  reservedCars   ReservedCar[]
 }
 
 model RentedCar {
   id        Int      @id @default(autoincrement())
   days      Int
   userId    Int
+  carId     Int
   user      User     @relation(fields: [userId], references: [id])
+  car       Car      @relation(fields: [carId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model ReservedCar {
   id          Int      @id @default(autoincrement())
-  rental_date DateTime
+  rental_date DateTime 
   days        Int
   userId      Int
+  carId       Int
   user        User     @relation(fields: [userId], references: [id])
+  car         Car      @relation(fields: [carId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

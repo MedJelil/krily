@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import { userSchema } from '../route';
+import { rentedCarSchema } from '../route';
 
 const prisma = new PrismaClient();
 
@@ -12,39 +12,36 @@ export async function GET(request: NextRequest, {params} : {params: {id: string}
   //   return NextResponse.json({ error: 'ID is required' }, { status: 400 });
   // }
 
-  const user = await prisma.user.findUnique({
+  const rentedCar = await prisma.rentedCar.findUnique({
     where: { id: Number(params.id) },
   });
 
-  if (!user) {
-    return NextResponse.json({ error: 'User not found' }, { status: 404 });
+  if (!rentedCar) {
+    return NextResponse.json({ error: 'rentedCar not found' }, { status: 404 });
   }
 
-  return NextResponse.json(user, { status: 200 });
+  return NextResponse.json(rentedCar, { status: 200 });
 }
 
 export async function PUT(request: NextRequest, {params} : {params: {id: string}}) {
   // const { id } = request.query;
-  const body = await request.json();
-  const validation = userSchema.safeParse(body);
+  const body = await request.json(); 
+  const validation = rentedCarSchema.safeParse(body);
 
   if (!validation.success) {
     return NextResponse.json(validation.error.errors, { status: 400 });
   }
 
-  const updatedUser = await prisma.user.update({
+  const updatedRentedCar = await prisma.rentedCar.update({
     where: { id: Number(params.id) },
     data: {
-      name: body.name,
-      phoneNumber: body.phoneNumber,
-      password: body.password,
-      image_url: body.image_url || '',
-      permis: body.permis || '',
-      identity: body.identity || '',
+        days: body.days,
+        userId: body.userId,
+        carId: body.carId,
     },
   });
 
-  return NextResponse.json(updatedUser, { status: 200 });
+  return NextResponse.json(updatedRentedCar, { status: 200 });
 }
 
 export async function DELETE(request: NextRequest, {params} : {params: {id: string}}) {
@@ -54,9 +51,9 @@ export async function DELETE(request: NextRequest, {params} : {params: {id: stri
   //   return NextResponse.json({ error: 'ID is required' }, { status: 400 });
   // }
 
-  await prisma.user.delete({
+  await prisma.rentedCar.delete({
     where: { id: Number(params.id) },
   });
 
-  return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
+  return NextResponse.json({ message: 'rentedCar deleted successfully' }, { status: 200 });
 }
