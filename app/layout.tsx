@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { Providers } from "./providers";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import theme from "./theme";
+import { ColorModeScript } from "@chakra-ui/react";
+import Nav from "./components/Navbar";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,11 +23,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <nav></nav>
-        <main className="p-5">
-          <Providers>{children}</Providers>
-        </main>
-        <footer></footer>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+
+        <Providers>
+          <Navbar />
+          <main className="min-h-screen">{children}</main>
+          <footer><Footer /></footer>
+        </Providers>
       </body>
     </html>
   );
