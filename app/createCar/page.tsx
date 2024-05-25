@@ -3,6 +3,7 @@
 import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import axios from "axios";
 import {
   Box,
   Button,
@@ -17,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
+import { useRouter } from "next/navigation";
 // import { carSchema } from "../apis/cars/route";
 
 const carSchema = z.object({
@@ -61,8 +63,12 @@ const CarInfo = () => {
     setUploading(false);
   };
 
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
+  const router = useRouter();
+  const onSubmit = async (data: FieldValues) => {
+    try {
+      await axios.post("/apis/cars", { ...data, rentalId: 2 });
+      router.push("/createCar");
+    } catch (error) {}
   };
 
   return (
@@ -270,3 +276,12 @@ const CarInfo = () => {
 };
 
 export default CarInfo;
+function toast(arg0: {
+  title: string;
+  description: string;
+  status: string;
+  duration: number;
+  isClosable: boolean;
+}) {
+  throw new Error("Function not implemented.");
+}
