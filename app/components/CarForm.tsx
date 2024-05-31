@@ -26,9 +26,9 @@ const carSchema = z.object({
   brand: z.string().min(1, "Brand name is required."),
   gearBox: z.string().min(1, "Gearbox type is required."),
   fuel: z.string().min(1, "Fuel type is required."),
-  main_image_url: z.string().url("Main image must be a valid URL."),
-  image1_url: z.string().url("First image must be a valid URL.").optional(),
-  image2_url: z.string().url("Second image must be a valid URL.").optional(),
+  main_image_url: z.string().url("Main image is required."),
+  image1_url: z.string().optional(),
+  image2_url: z.string().optional(),
   silenders: z.number().int().min(1, "Sylinder count must be at least 1."),
   color: z.string().min(1, "Car color is required."),
   year: z
@@ -46,7 +46,24 @@ interface cloudinaryResult {
   secure_url: string;
 }
 
-const CarInfo = () => {
+interface props {
+  carData?: {
+    id: number;
+    model: string;
+    brand: string;
+    gearBox: string;
+    fuel: string;
+    main_image_url: string;
+    image1_url: string;
+    image2_url: string;
+    silenders: number;
+    color: string;
+    year: number;
+    daily_price: number;
+    rentalId: number;
+  };
+}
+const CarForm = ({ carData }: props) => {
   const {
     register,
     handleSubmit,
@@ -65,10 +82,18 @@ const CarInfo = () => {
 
   const router = useRouter();
   const onSubmit = async (data: FieldValues) => {
-    try {
-      await axios.post("/apis/cars", { ...data, rentalId: 2 });
-      router.push("/createCar");
-    } catch (error) {}
+    if (carData) {
+      // console.log(carData);
+      try {
+        await axios.put(`/apis/cars/${carData.id}`, { ...data, rentalId: 2 } );
+        router.push(`/rental/cars/details/${carData.id}`);
+      } catch (error) {}
+    } else {
+      try {
+        await axios.post("/apis/cars", { ...data, rentalId: 2 });
+        router.push("/rental/cars/new");
+      } catch (error) {}
+    }
   };
 
   return (
@@ -78,7 +103,7 @@ const CarInfo = () => {
           <GridItem>
             <FormControl id="model" isInvalid={!!errors.model}>
               <FormLabel>Model</FormLabel>
-              <Input {...register("model")} />
+              <Input {...register("model")} defaultValue={carData?.model} />
               {errors.model && (
                 <p className="text-red-500">{errors.model.message}</p>
               )}
@@ -87,7 +112,7 @@ const CarInfo = () => {
           <GridItem>
             <FormControl id="brand" isInvalid={!!errors.brand}>
               <FormLabel>Brand</FormLabel>
-              <Input {...register("brand")} />
+              <Input {...register("brand")} defaultValue={carData?.brand} />
               {errors.brand && (
                 <p className="text-red-500">{errors.brand.message}</p>
               )}
@@ -96,7 +121,7 @@ const CarInfo = () => {
           <GridItem>
             <FormControl id="gearBox" isInvalid={!!errors.gearBox}>
               <FormLabel>Gear Box</FormLabel>
-              <Input {...register("gearBox")} />
+              <Input {...register("gearBox")} defaultValue={carData?.gearBox} />
               {errors.gearBox && (
                 <p className="text-red-500">{errors.gearBox.message}</p>
               )}
@@ -105,7 +130,7 @@ const CarInfo = () => {
           <GridItem>
             <FormControl id="fuel" isInvalid={!!errors.fuel}>
               <FormLabel>Fuel</FormLabel>
-              <Input {...register("fuel")} />
+              <Input {...register("fuel")} defaultValue={carData?.fuel} />
               {errors.fuel && (
                 <p className="text-red-500">{errors.fuel.message}</p>
               )}
@@ -118,6 +143,7 @@ const CarInfo = () => {
               <Input
                 type="number"
                 {...register("silenders", { valueAsNumber: true })}
+                defaultValue={carData?.silenders}
               />
               {errors.silenders && (
                 <p className="text-red-500">{errors.silenders.message}</p>
@@ -127,7 +153,7 @@ const CarInfo = () => {
           <GridItem>
             <FormControl id="color" isInvalid={!!errors.color}>
               <FormLabel>Color</FormLabel>
-              <Input {...register("color")} />
+              <Input {...register("color")} defaultValue={carData?.color} />
               {errors.color && (
                 <p className="text-red-500">{errors.color.message}</p>
               )}
@@ -139,6 +165,7 @@ const CarInfo = () => {
               <Input
                 type="number"
                 {...register("year", { valueAsNumber: true })}
+                defaultValue={carData?.year}
               />
               {errors.year && (
                 <p className="text-red-500">{errors.year.message}</p>
@@ -151,6 +178,7 @@ const CarInfo = () => {
               <Input
                 type="number"
                 {...register("daily_price", { valueAsNumber: true })}
+                defaultValue={carData?.daily_price}
               />
               {errors.daily_price && (
                 <p className="text-red-500">{errors.daily_price.message}</p>
@@ -170,6 +198,7 @@ const CarInfo = () => {
                 <Input
                   type="hidden"
                   {...register("main_image_url")}
+                  defaultValue={carData?.main_image_url}
                   isReadOnly
                 />
                 <CldUploadWidget
@@ -205,7 +234,12 @@ const CarInfo = () => {
 
               <FormControl id="image1_url" isInvalid={!!errors.image1_url}>
                 <FormLabel>Image 1 </FormLabel>
-                <Input type="hidden" {...register("image1_url")} isReadOnly />
+                <Input
+                  type="hidden"
+                  {...register("image1_url")}
+                  isReadOnly
+                  defaultValue={carData?.image1_url}
+                />
                 <CldUploadWidget
                   uploadPreset={
                     process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
@@ -237,7 +271,12 @@ const CarInfo = () => {
 
               <FormControl id="image2_url" isInvalid={!!errors.image2_url}>
                 <FormLabel>Image 2 </FormLabel>
-                <Input type="hidden" {...register("image2_url")} isReadOnly />
+                <Input
+                  type="hidden"
+                  {...register("image2_url")}
+                  isReadOnly
+                  defaultValue={carData?.image2_url}
+                />
                 <CldUploadWidget
                   uploadPreset={
                     process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
@@ -267,21 +306,28 @@ const CarInfo = () => {
             </HStack>
           </GridItem>
         </Grid>
-        <Button mt={4} type="submit" colorScheme="teal">
-          Submit
-        </Button>
+        {!carData && (
+          <Button mt={4} type="submit" colorScheme="teal">
+            Submit
+          </Button>
+        )}
+        {carData && (
+          <Button mt={4} type="submit" colorScheme="teal">
+            Edit
+          </Button>
+        )}
       </form>
     </Box>
   );
 };
 
-export default CarInfo;
-function toast(arg0: {
-  title: string;
-  description: string;
-  status: string;
-  duration: number;
-  isClosable: boolean;
-}) {
-  throw new Error("Function not implemented.");
-}
+export default CarForm;
+// function toast(arg0: {
+//   title: string;
+//   description: string;
+//   status: string;
+//   duration: number;
+//   isClosable: boolean;
+// }) {
+//   throw new Error("Function not implemented.");
+// }

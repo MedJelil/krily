@@ -54,11 +54,7 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  // const { id } = request.query;
 
-//   if (!params.id) {
-//     return NextResponse.json({ error: "ID is required" }, { status: 400 });
-//   }
 
   await prisma.rental.delete({
     where: { id: Number(params.id) },
