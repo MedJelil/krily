@@ -15,11 +15,11 @@ import {
   Grid,
   GridItem,
   Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 import { useRouter } from "next/navigation";
-// import { carSchema } from "../apis/cars/route";
 
 const carSchema = z.object({
   model: z.string().min(1, "Model name is required."),
@@ -82,17 +82,44 @@ const CarForm = ({ carData }: props) => {
   };
 
   const router = useRouter();
+  const [isSubmiting, setSubmiting] = useState(false);
+  const toast = useToast()
+  
   const onSubmit = async (data: FieldValues) => {
     if (carData) {
       // console.log(carData);
       try {
-        await axios.put(`/apis/cars/${carData.id}`, { ...data, rentalId: 2 } );
+        setSubmiting(true);
+        const result = await axios.put(`/apis/cars/${carData.id}`, { ...data, rentalId: 1 } );
+        if(result){
+          const showToast = () => toast({
+            title: 'Car updated succesfuly.',
+            description: "We've update your car for you.",
+            status: 'success',
+            duration: 9000,
+            isClosable: true,
+          });
+          showToast();
+        }
         router.push(`/rental/cars/details/${carData.id}`);
-      } catch (error) {}
+      } catch (error) {
+        setSubmiting(false);
+        
+      }
     } else {
       try {
-        await axios.post("/apis/cars", { ...data, rentalId: 2 });
-        router.push("/rental/cars/new");
+        const result = await axios.post("/apis/cars", { ...data, rentalId: 1 });
+        router.push("/rental/cars");
+        if(result){
+          const showToast = () => toast({
+            title: 'Car created succesfuly.',
+            description: "We've created your car for you.",
+            status: 'success',
+            duration: 9000,
+            isClosable: true,
+          });
+          showToast();
+        }
       } catch (error) {}
     }
   };
@@ -308,13 +335,13 @@ const CarForm = ({ carData }: props) => {
           </GridItem>
         </Grid>
         {!carData && (
-          <Button mt={4} type="submit" colorScheme="teal">
-            Submit
+          <Button mt={4} type="submit" colorScheme="teal" disabled={isSubmiting}>
+            {isSubmiting ? <Spinner /> : "Submit"}
           </Button>
         )}
         {carData && (
-          <Button mt={4} type="submit" colorScheme="teal">
-            Edit
+          <Button mt={4} type="submit" colorScheme="teal" disabled={isSubmiting}>
+            {isSubmiting ? <Spinner /> : "Edit"}
           </Button>
         )}
       </form>

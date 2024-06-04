@@ -1,14 +1,23 @@
 "use client";
-import { Button, Box, Text } from "@chakra-ui/react";
+import { Button, Box, Text, useToast } from "@chakra-ui/react";
 import EditButton from "./components/EditButton";
 import DeleteButton from "./components/DeleteButton";
 import CarsGrid from "./components/CarsGrid";
 
+
+
 export default function Home() {
-  const clickHandler = () => console.log("click");
+  const toast = useToast()
+  const clickHandler = () =>  toast({
+    title: 'Account created.',
+    description: "We've created your account for you.",
+    status: 'success',
+    duration: 9000,
+    isClosable: true,
+  });
   return (
     <>
-      {/* <Box p={4}>
+      <Box p={4}>
         <Text fontSize="xl" color="red.500">
           Welcome to Chakra UI
         </Text>
@@ -17,8 +26,8 @@ export default function Home() {
         </Button>
         <EditButton link={"#"}/>
         <DeleteButton link={"#"}/>
-      </Box> */}
-      <CarsGrid showed_for="user"/>
+      </Box>
+      {/* <CarsGrid showed_for="user"/> */}
     </>
   );
 }

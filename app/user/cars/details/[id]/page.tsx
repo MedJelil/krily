@@ -21,7 +21,7 @@ const page = ({ params }: { params: { id: string } }) => {
 
     fetchCar();
   }, []);
-  if (car) return <CarDetails car={car} showed_for="rental" />;
+  if (car) return <CarDetails car={car} showed_for="user" />;
 };
 
 export default page;
