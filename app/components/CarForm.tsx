@@ -53,6 +53,7 @@ interface props {
     brand: string;
     gearBox: string;
     fuel: string;
+    status: string;
     main_image_url: string;
     image1_url: string;
     image2_url: string;

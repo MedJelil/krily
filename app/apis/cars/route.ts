@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
     },
   });
 
+  
   return NextResponse.json(newCar, { status: 201 });
 }
 
