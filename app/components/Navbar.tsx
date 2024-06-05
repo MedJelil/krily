@@ -86,10 +86,10 @@ export default function withAction() {
                 />
               </MenuButton>
               <MenuList>
-                <MenuItem>Link 1</MenuItem>
-                <MenuItem>Link 2</MenuItem>
+                <MenuItem>Profile</MenuItem>
+                <MenuItem>Acount verification</MenuItem>
                 <MenuDivider />
-                <MenuItem>Link 3</MenuItem>
+                <MenuItem>Signout</MenuItem>
               </MenuList>
             </Menu>
           </Flex>

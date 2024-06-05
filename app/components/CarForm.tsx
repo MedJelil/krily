@@ -83,7 +83,7 @@ const CarForm = ({ carData }: props) => {
 
   const router = useRouter();
   const [isSubmiting, setSubmiting] = useState(false);
-  const toast = useToast()
+  const toast = useToast();
   
   const onSubmit = async (data: FieldValues) => {
     if (carData) {
@@ -108,6 +108,7 @@ const CarForm = ({ carData }: props) => {
       }
     } else {
       try {
+        setSubmiting(true);
         const result = await axios.post("/apis/cars", { ...data, rentalId: 1 });
         router.push("/rental/cars");
         if(result){
@@ -120,7 +121,9 @@ const CarForm = ({ carData }: props) => {
           });
           showToast();
         }
-      } catch (error) {}
+      } catch (error) {
+        setSubmiting(false);
+      }
     }
   };
 

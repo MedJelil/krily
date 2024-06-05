@@ -8,8 +8,13 @@ import {
   Heading,
   SimpleGrid,
   HStack,
+  Button,
 } from "@chakra-ui/react";
 import { CarData } from "../rental/cars/edit/[id]/page";
+import EditButton from "./EditButton";
+import axios from "axios";
+import DeleteButton from "./DeleteButton";
+import Link from "next/link";
 
 interface Props {
   car: CarData;
@@ -20,9 +25,27 @@ const CarDetails = ({ car, showed_for }: Props) => {
   return (
     <Container maxW="container.lg" mt={10}>
       <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4}>
-        <Heading mb={4}>
-          <span className="capitalize">{car.model} </span>
-        </Heading>
+        <HStack justifyContent={"space-between"} alignItems={"center"}> 
+          <Heading mb={4} alignItems={"center"}>
+            <span className="capitalize">{car.model} </span>
+          </Heading>
+          {showed_for == "rental" && <HStack alignItems={"center"}>
+            <EditButton link={`/rental/cars/edit/${car.id}`} />
+            <DeleteButton id={car.id} />
+          </HStack>}
+          {showed_for == "user" && <HStack alignItems={"center"}>
+            <Link href={"#"}>
+            <Button colorScheme="blue" size={"sm"}>
+              Reserv
+            </Button>
+            </Link>
+            <Link href={"#"}>
+            <Button colorScheme="blue" size={"sm"}>
+              Rental
+            </Button>
+            </Link>
+          </HStack>}
+        </HStack>
         <Box
           mx="auto"
           width={{ base: "100%", sm: "80%", md: "60%", lg: "50%" }}
@@ -37,7 +60,7 @@ const CarDetails = ({ car, showed_for }: Props) => {
             borderRadius="lg"
           />
         </Box>
-        <VStack align="center" spacing={4} >
+        <VStack align="center" spacing={4}>
           <HStack justifyContent={"space-between"} gap={2}>
             <Text>Brand: {car.brand}</Text>
             <Text>Color: {car.color}</Text>
@@ -50,7 +73,7 @@ const CarDetails = ({ car, showed_for }: Props) => {
           </HStack>
           <HStack justifyContent={"space-between"} gap={2}>
             <Text>Silenders: {car.silenders}</Text>
-            <Box>
+           {showed_for == "rental" && <Box>
               Status:{" "}
               <Text
                 display={"inline"}
@@ -68,7 +91,7 @@ const CarDetails = ({ car, showed_for }: Props) => {
               >
                 {car.status}
               </Text>
-            </Box>
+            </Box>}
           </HStack>
           <SimpleGrid columns={2} spacing={4}>
             {car.image1_url && (

@@ -25,7 +25,7 @@ export default function Home() {
           Click Me
         </Button>
         <EditButton link={"#"}/>
-        <DeleteButton link={"#"}/>
+        {/* <DeleteButton onClick={console.log("...")}/> */}
       </Box>
       {/* <CarsGrid showed_for="user"/> */}
     </>
