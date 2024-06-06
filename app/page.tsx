@@ -3,6 +3,8 @@ import { Button, Box, Text, useToast } from "@chakra-ui/react";
 import EditButton from "./components/EditButton";
 import DeleteButton from "./components/DeleteButton";
 import CarsGrid from "./components/CarsGrid";
+import PopupForm from "./components/PopupForm";
+import DatePiker from "./components/DatePiker";
 
 
 
@@ -28,6 +30,9 @@ export default function Home() {
         {/* <DeleteButton onClick={console.log("...")}/> */}
       </Box>
       {/* <CarsGrid showed_for="user"/> */}
+      <PopupForm />
+      <PopupForm />
+      {/* <DatePiker /> */}
     </>
   );
 }
