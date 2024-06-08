@@ -73,6 +73,7 @@ model RentedCar {
   id        Int      @id @default(autoincrement())
   days      Int
   userId    Int
+  status Status @default(IN_PROGRESS)
   carId     Int
   user      User     @relation(fields: [userId], references: [id])
   car       Car      @relation(fields: [carId], references: [id])
@@ -81,15 +82,17 @@ model RentedCar {
 }
 
 model ReservedCar {
-  id          Int      @id @default(autoincrement())
-  rental_date DateTime 
-  days        Int
-  userId      Int
-  carId       Int
-  user        User     @relation(fields: [userId], references: [id])
-  car         Car      @relation(fields: [carId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                   Int      @id @default(autoincrement())
+  rental_date          DateTime
+  end_reservation_date DateTime
+  days                 Int
+  status Status @default(IN_PROGRESS)
+  userId               Int
+  carId                Int
+  user                 User     @relation(fields: [userId], references: [id])
+  car                  Car      @relation(fields: [carId], references: [id])
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 }
 
 enum Status {

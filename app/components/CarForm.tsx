@@ -27,10 +27,7 @@ const carSchema = z.object({
   model: z.string().min(1, "Model name is required."),
   brand: z.string().min(1, "Brand name is required."),
   gearBox: z.enum(["manuel", "auto"]),
-  fuel: z.enum([
-    "gazoil",
-    "essence"
-  ]),
+  fuel: z.enum(["gazoil", "essence"]),
   // fuel: z.string().min(1, "Fuel type is required."),
   main_image_url: z.string().url("Main image is required."),
   image1_url: z.string().optional(),
@@ -310,8 +307,9 @@ const CarForm = ({ carData }: props) => {
                     src={main_image}
                     alt="Main mage"
                     objectFit="cover"
-                    width="100%"
-                    height="auto"
+                    w={"250px"}
+                    h={"150px"} 
+                    borderRadius={5}
                   />
                 </Box>
               )}
@@ -357,8 +355,9 @@ const CarForm = ({ carData }: props) => {
                     src={image_1}
                     alt="Image 1"
                     objectFit="cover"
-                    width="100%"
-                    height="auto"
+                    w={"250px"}
+                    h={"150px"} 
+                    borderRadius={5}
                   />
                 </Box>
               )}
@@ -404,8 +403,9 @@ const CarForm = ({ carData }: props) => {
                     src={image_2}
                     alt="Image 2"
                     objectFit="cover"
-                    width="100%"
-                    height="auto"
+                    w={"250px"}
+                    h={"150px"}
+                    borderRadius={5}
                   />
                 </Box>
               )}

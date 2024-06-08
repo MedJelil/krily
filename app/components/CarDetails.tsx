@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import {
   Box,
   Image,
@@ -8,13 +7,12 @@ import {
   Heading,
   SimpleGrid,
   HStack,
-  Button,
 } from "@chakra-ui/react";
 import { CarData } from "../rental/cars/edit/[id]/page";
 import EditButton from "./EditButton";
-import axios from "axios";
 import DeleteButton from "./DeleteButton";
-import Link from "next/link";
+import PopupForm from "./PopupForm";
+import RentalPopup from "./RentalPopup";
 
 interface Props {
   car: CarData;
@@ -34,16 +32,8 @@ const CarDetails = ({ car, showed_for }: Props) => {
             <DeleteButton id={car.id} />
           </HStack>}
           {showed_for == "user" && <HStack alignItems={"center"}>
-            <Link href={"#"}>
-            <Button colorScheme="blue" size={"sm"}>
-              Reserv
-            </Button>
-            </Link>
-            <Link href={"#"}>
-            <Button colorScheme="blue" size={"sm"}>
-              Rental
-            </Button>
-            </Link>
+            <PopupForm carId={car.id} />
+            <RentalPopup carId={car.id} />
           </HStack>}
         </HStack>
         <Box

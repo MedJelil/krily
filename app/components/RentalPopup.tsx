@@ -22,7 +22,6 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 const reservedCarSchema = z.object({
-  rental_date: z.string().min(1, "you must enter the reservation date"),
 
   days: z
     .number()
@@ -38,8 +37,10 @@ type ReservationData = z.infer<typeof reservedCarSchema>;
 interface Props {
   carId: number;
 }
-const PopupForm = ({ carId }: Props) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+
+
+const RentalPopup = ({ carId }: Props) => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
   const initialRef = useRef(null);
   const finalRef = useRef(null);
@@ -67,18 +68,16 @@ const PopupForm = ({ carId }: Props) => {
 
   const onSubmit = async (data: FieldValues) => {
     try {
-      const result = await axios.post("/apis/reservedCars", {
+      const result = await axios.post("/apis/rentedCars", {
         ...data,
-        rental_date: formatDateTime(data.rental_date),
-        end_reservation_date: end_reservation_date(data.rental_date, data.days),
         userId: 1,
         carId: carId,
       });
       if (result) {
         const showToast = () =>
           toast({
-            title: "car reserved",
-            description: "your reservation has been reserved",
+            title: "request sent",
+            description: "your reservation has been reserved please wait ",
             status: "success",
             duration: 9000,
             isClosable: true,
@@ -105,10 +104,9 @@ const PopupForm = ({ carId }: Props) => {
     //   carId: carId,
     // });
   };
-
   return (
     <>
-      <Button onClick={onOpen}>reserve</Button>
+      <Button onClick={onOpen}>rent</Button>
 
       <Modal
         initialFocusRef={initialRef}
@@ -118,23 +116,10 @@ const PopupForm = ({ carId }: Props) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Confirm your reservation</ModalHeader>
+          <ModalHeader>Confirm your renting</ModalHeader>
           <ModalCloseButton />
           <form onSubmit={handleSubmit(onSubmit)}>
             <ModalBody pb={6}>
-              <FormControl>
-                <FormLabel>Reservation date</FormLabel>
-                <Input
-                  placeholder="Select Date and Time"
-                  size="md"
-                  type="datetime-local"
-                  {...register("rental_date")}
-                />
-                {errors.rental_date && (
-                  <p className="text-red-500">{errors.rental_date.message}</p>
-                )}
-              </FormControl>
-
               <FormControl mt={4}>
                 <FormLabel>Days</FormLabel>
                 <Input
@@ -158,7 +143,7 @@ const PopupForm = ({ carId }: Props) => {
         </ModalContent>
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default PopupForm;
+export default RentalPopup
