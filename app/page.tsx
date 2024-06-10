@@ -4,7 +4,8 @@ import EditButton from "./components/EditButton";
 import DeleteButton from "./components/DeleteButton";
 import CarsGrid from "./components/CarsGrid";
 import PopupForm from "./components/PopupForm";
-import RequestRow from "./components/RequestRow";
+import RequestRow from "./components/ReservationRequests";
+import ReservationRequests from "./components/ReservationRequests";
 
 
 
@@ -26,11 +27,10 @@ export default function Home() {
         <Button colorScheme="blue" onClick={clickHandler}>
           Click Me
         </Button>
-        <EditButton link={"#"}/>
         {/* <DeleteButton onClick={console.log("...")}/> */}
       </Box>
       {/* <CarsGrid showed_for="user"/> */}
-      <RequestRow />
+      <ReservationRequests />
 
     </>
   );

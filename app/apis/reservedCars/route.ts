@@ -47,6 +47,11 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  const reservedCars = await prisma.reservedCar.findMany();
+  const reservedCars = await prisma.reservedCar.findMany({
+    include: {
+      user: true,
+      car: true,
+    },
+  });
   return NextResponse.json(reservedCars, { status: 200 });
 }
