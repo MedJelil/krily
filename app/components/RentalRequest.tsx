@@ -43,7 +43,7 @@ import {
     }
   
     return (
-      <Box p={4}>
+      <Box p-4>
         <Stack direction="row" spacing={4} align="center">
           <Image
             borderRadius="full"

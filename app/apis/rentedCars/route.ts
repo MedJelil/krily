@@ -7,6 +7,7 @@ export const rentedCarSchema = z.object({
     days: z.number().int().min(1, "Days must be at least 1, indicating the car is rented for at least one day."),
     userId: z.number().int().positive("User ID must be a positive integer representing a valid user."),
     carId: z.number().int().positive("Car ID must be a positive integer representing a valid user."),
+    status: z.string().optional()
   });
 
 export async function POST(request: NextRequest) {

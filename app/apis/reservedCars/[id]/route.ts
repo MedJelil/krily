@@ -38,8 +38,25 @@ export async function PUT(
 ) {
   // const { id } = request.query;
   const body = await request.json();
-  const validation = reservedCarSchema.safeParse(body);
-
+  
+  const reservedCar = await prisma.reservedCar.findUnique({
+    where: { id: Number(params.id) },
+    include: {
+      user: true,
+      car: true,
+    },
+  });
+  const newReservedCar = {
+    days: body.days || reservedCar?.days,
+    userId: body.userId || reservedCar?.userId,
+    carId: body.carId || reservedCar?.carId,
+    status: body.status || reservedCar?.status,
+    car: body.car || reservedCar?.car,
+    user: body.user || reservedCar?.user,
+    rental_date: body.rental_date || reservedCar?.rental_date.toISOString(),
+    end_reservation_date: body.end_reservation_date || reservedCar?.end_reservation_date.toISOString(),
+  }
+  const validation = reservedCarSchema.safeParse(newReservedCar);
   if (!validation.success) {
     return NextResponse.json(validation.error.errors, { status: 400 });
   }
@@ -47,9 +64,10 @@ export async function PUT(
   const updatedReservedCar = await prisma.reservedCar.update({
     where: { id: Number(params.id) },
     data: {
-      days: body.days,
-      userId: body.userId,
-      carId: body.carId,
+      days: newReservedCar.days,
+      userId: newReservedCar.userId,
+      carId: newReservedCar.carId,
+      status: newReservedCar.status,
     },
   });
 

@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       daily_price: body.daily_price,
       rentalId: body.rentalId,
     },
-  });
+  }); 
 
   
   return NextResponse.json(newCar, { status: 201 });

@@ -22,6 +22,7 @@ export const reservedCarSchema = z.object({
     .number()
     .int()
     .positive("Car ID must be a positive integer representing a valid user."),
+  status: z.string().optional() ,
 });
 
 export async function POST(request: NextRequest) {
