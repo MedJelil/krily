@@ -11,6 +11,17 @@ export interface User {
     createdAt: string; // ISO 8601 date string
     updatedAt: string; // ISO 8601 date string
   }
+
+  interface Rental {
+    id: number;
+    name: string;
+    phoneNumber: string;
+    password: string;
+    status: string; 
+    location: string;
+    createdAt: string; // ISO 8601 date string
+    updatedAt: string; // ISO 8601 date string
+  }
   
   export interface Car {
     id: number;
@@ -29,9 +40,12 @@ export interface User {
     rentalId: number;
     createdAt: string; // ISO 8601 date string
     updatedAt: string; // ISO 8601 date string
+    rental: Rental;
   }
+
+
   
-  export interface Rental {
+  export interface RentedCar {
     id: number;
     days: number;
     status: string;
@@ -56,3 +70,4 @@ export interface User {
     user: User;
     car: Car;
   }
+

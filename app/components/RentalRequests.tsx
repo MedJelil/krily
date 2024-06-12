@@ -13,12 +13,12 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Rental } from "../interfaces";
+import { RentedCar } from "../interfaces";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-const RentalsRequests = () => {
-  const [rentals, setRentals] = useState<Rental[]>([]);
+const RentalRequests = () => {
+  const [rentals, setRentals] = useState<RentedCar[]>([]);
   const [error, setError] = useState("");
   const router = useRouter();
 
@@ -103,4 +103,4 @@ const RentalsRequests = () => {
   );
 };
 
-export default RentalsRequests;
+export default RentalRequests;

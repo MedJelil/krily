@@ -10,7 +10,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import RentalRequests from "@/app/components/RentalRequests";
+import UserRentalRequests from "@/app/components/UserRentalRequests";
+import UserReservationRequests from "@/app/components/UserReservationRequests";
 
 const page = () => {
   const [reservation, setReservation] = useState(false);
@@ -59,9 +60,9 @@ const page = () => {
               <Heading size="md"> Requests</Heading>
             </CardHeader>
             <CardBody p={{ sm: 0, md: 4 }}>
-              {reservation && <ReservationRequests />}
+              {reservation && <UserReservationRequests />}
 
-              {rental && <RentalRequests />}
+              {rental && <UserRentalRequests />}
             </CardBody>
           </Card>
         </div>

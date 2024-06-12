@@ -51,8 +51,13 @@ export async function GET() {
   const reservedCars = await prisma.reservedCar.findMany({
     include: {
       user: true,
-      car: true,
+      car: {
+        include: {
+          rental: true, // Include the rental attribute
+        },
+      },
     },
   });
   return NextResponse.json(reservedCars, { status: 200 });
 }
+

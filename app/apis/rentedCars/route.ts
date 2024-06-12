@@ -31,11 +31,16 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  const rentedCars = await prisma.rentedCar.findMany({
+  const rentedCars = await prisma.reservedCar.findMany({
     include: {
       user: true,
-      car: true,
+      car: {
+        include: {
+          rental: true, // Include the rental attribute
+        },
+      },
     },
   });
   return NextResponse.json(rentedCars, { status: 200 });
 }
+
