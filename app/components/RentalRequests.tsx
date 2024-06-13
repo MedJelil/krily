@@ -62,7 +62,7 @@ const RentalRequests = () => {
       <Table variant="simple">
         <Thead>
           <Tr>
-            <Th>User</Th>
+            <Th>client</Th>
             <Th>Car</Th>
             <Th>Days</Th>
           </Tr>
@@ -85,10 +85,10 @@ const RentalRequests = () => {
                   <Image
                     borderRadius="full"
                     boxSize="50px"
-                    src={rental.user.image_url || "https://bit.ly/dan-abramov"}
-                    alt={rental.user.name}
+                    src={rental.client.image_url || "https://bit.ly/dan-abramov"}
+                    alt={rental.client.user.name}
                   />
-                  <Text>{rental.user.name}</Text>
+                  <Text>{rental.client.user.name}</Text>
                 </Box>
               </Td>
               <Td>

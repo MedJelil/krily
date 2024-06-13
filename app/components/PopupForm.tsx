@@ -71,7 +71,7 @@ const PopupForm = ({ carId }: Props) => {
         ...data,
         rental_date: formatDateTime(data.rental_date),
         end_reservation_date: end_reservation_date(data.rental_date, data.days),
-        userId: 1,
+        clientId: 2,
         carId: carId,
       });
       if (result) {
@@ -83,7 +83,7 @@ const PopupForm = ({ carId }: Props) => {
             duration: 9000,
             isClosable: true,
           });
-        router.push("/rental/cars");
+        router.push("/user/requests");
         showToast();
       }
     } catch (error) {

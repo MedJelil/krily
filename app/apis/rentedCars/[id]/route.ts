@@ -8,16 +8,13 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  // const { id } = request.query;
-
-  // if (!params.id) {
-  //   return NextResponse.json({ error: 'ID is required' }, { status: 400 });
-  // }
 
   const rentedCar = await prisma.rentedCar.findUnique({
     where: { id: Number(params.id) },
     include: {
-      user: true,
+      client: {include: {
+        user: true
+      }},
       car: true,
     },
   });
@@ -36,20 +33,24 @@ export async function PUT(
   // const { id } = request.query;
   const body = await request.json();
 
+
+
   const rentedCar = await prisma.rentedCar.findUnique({
     where: { id: Number(params.id) },
     include: {
-      user: true,
+      client: {include: {
+        user: true
+      }},
       car: true,
     },
   });
   const newRentedCar = {
     days: body.days || rentedCar?.days,
-    userId: body.userId || rentedCar?.userId,
+    clientId: body.clientId || rentedCar?.clientId,
     carId: body.carId || rentedCar?.carId,
     status: body.status || rentedCar?.status,
     car: body.car || rentedCar?.car,
-    user: body.user || rentedCar?.user,
+    client: body.client || rentedCar?.client,
   };
 
   const validation = rentedCarSchema.safeParse(newRentedCar);
@@ -61,7 +62,7 @@ export async function PUT(
     where: { id: Number(params.id) },
     data: {
       days: newRentedCar.days,
-      userId: newRentedCar.userId,
+      clientId: newRentedCar.clientId,
       carId: newRentedCar.carId,
       status: newRentedCar.status,
     },

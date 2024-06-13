@@ -64,10 +64,10 @@ const RentalDetail = ({ params }: { params: { id: string } }) => {
             <Image
               borderRadius="full"
               boxSize="100px"
-              src={rental.user.image_url || "https://bit.ly/dan-abramov"}
-              alt={rental.user.name}
+              src={rental.client.image_url || "https://bit.ly/dan-abramov"}
+              alt={rental.client.user.name}
             />
-            <Heading>{rental.user.name}</Heading>
+            <Heading>{rental.client.user.name}</Heading>
           </Stack>
           <Stack
             direction={{ base: "column", md: "row" }}

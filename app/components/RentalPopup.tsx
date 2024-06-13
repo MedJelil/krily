@@ -70,7 +70,7 @@ const RentalPopup = ({ carId }: Props) => {
     try {
       const result = await axios.post("/apis/rentedCars", {
         ...data,
-        userId: 1,
+        clientId: 2,
         carId: carId,
       });
       if (result) {
@@ -82,7 +82,7 @@ const RentalPopup = ({ carId }: Props) => {
             duration: 9000,
             isClosable: true,
           });
-        router.push("/rental/cars");
+        router.push("/user/requests");
         showToast();
       }
     } catch (error) {

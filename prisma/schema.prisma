@@ -13,18 +13,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Admin {
-  id          Int    @id @default(autoincrement())
+model User {
+  id          Int     @id @default(autoincrement())
   name        String
-  phoneNumber String @unique
+  phoneNumber String  @unique
   password    String
+  roleId      Int?
+  role        Role?   @relation(fields: [roleId], references: [id])
+  admin       Admin?
+  rental      Rental?
+  client      Client?
 }
 
-model User {
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String
+  user User[]
+}
+
+model Admin {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+}
+
+model Client {
   id           Int           @id @default(autoincrement())
-  name         String
-  phoneNumber  String        @unique
-  password     String
   status       Status        @default(NOT_VERIFIED)
   image_url    String
   permis       String
@@ -33,18 +47,20 @@ model User {
   updatedAt    DateTime      @updatedAt
   rentedCars   RentedCar[] // One-to-many relationship
   reservedCars ReservedCar[] // One-to-many relationship
+  userId       Int           @unique
+  user         User          @relation(fields: [userId], references: [id])
 }
 
 model Rental {
-  id          Int      @id @default(autoincrement())
-  name        String
-  phoneNumber String   @unique
-  password    String
-  status      Status   @default(NOT_VERIFIED)
-  location    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  cars        Car[] // One-to-many relationship
+  id        Int      @id @default(autoincrement())
+  status    Status   @default(NOT_VERIFIED)
+  image_url String   @default("")
+  location  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id])
+  cars      Car[] // One-to-many relationship
 }
 
 model Car {
@@ -72,10 +88,10 @@ model Car {
 model RentedCar {
   id        Int      @id @default(autoincrement())
   days      Int
-  userId    Int
-  status Status @default(IN_PROGRESS)
+  clientId  Int
+  status    Status   @default(IN_PROGRESS)
   carId     Int
-  user      User     @relation(fields: [userId], references: [id])
+  client    Client   @relation(fields: [clientId], references: [id])
   car       Car      @relation(fields: [carId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -86,10 +102,10 @@ model ReservedCar {
   rental_date          DateTime
   end_reservation_date DateTime
   days                 Int
-  status Status @default(IN_PROGRESS)
-  userId               Int
+  status               Status   @default(IN_PROGRESS)
+  clientId             Int
   carId                Int
-  user                 User     @relation(fields: [userId], references: [id])
+  client               Client   @relation(fields: [clientId], references: [id])
   car                  Car      @relation(fields: [carId], references: [id])
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt

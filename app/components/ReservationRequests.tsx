@@ -91,12 +91,12 @@ const ReservationRequests = () => {
                           borderRadius="full"
                           boxSize="50px"
                           src={
-                            reservation.user.image_url ||
+                            reservation.client.image_url ||
                             "https://bit.ly/dan-abramov"
                           }
-                          alt={reservation.user.name}
+                          alt={reservation.client.user.name}
                         />
-                        <Text>{reservation.user.name}</Text>
+                        <Text>{reservation.client.user.name}</Text>
                       </Box>
                     </Td>
                     <Td>

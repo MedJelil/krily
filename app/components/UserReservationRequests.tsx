@@ -91,11 +91,11 @@ import {
                             borderRadius="full"
                             boxSize="50px"
                             src={
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRptObCFSqjgs9qHPomG55uOyGO4ZEX11gZKg&usqp=CAU"
+                             reservation.car.rental.image_url || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRptObCFSqjgs9qHPomG55uOyGO4ZEX11gZKg&usqp=CAU"
                             }
-                            alt={reservation.car.rental.name}
+                            alt={reservation.car.rental.user.name}
                           />
-                          <Text>{reservation.user.name}</Text>
+                          <Text>{reservation.car.rental.user.name}</Text>
                         </Box>
                       </Td>
                       <Td>

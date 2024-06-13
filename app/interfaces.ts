@@ -4,21 +4,26 @@ export interface User {
     name: string;
     phoneNumber: string;
     password: string;
-    status: 'NOT_VERIFIED' | 'VERIFIED';
-    image_url: string;
-    permis: string;
-    identity: string;
-    createdAt: string; // ISO 8601 date string
-    updatedAt: string; // ISO 8601 date string
+
+  }
+export interface Client {
+  id: number;
+  user: User;
+  status: string;
+  image_url: string;
+  permis: string;
+  identity: string;
+  createdAt: string; // ISO 8601 date string
+  updatedAt: string; // ISO 8601 date string
+
   }
 
   interface Rental {
     id: number;
-    name: string;
-    phoneNumber: string;
-    password: string;
+    user: User;
     status: string; 
     location: string;
+    image_url: string;
     createdAt: string; // ISO 8601 date string
     updatedAt: string; // ISO 8601 date string
   }
@@ -53,7 +58,7 @@ export interface User {
     carId: number;
     createdAt: string; // ISO 8601 date string
     updatedAt: string; // ISO 8601 date string
-    user: User;
+    client: Client;
     car: Car;
   }
 
@@ -67,7 +72,20 @@ export interface User {
     carId: number;
     createdAt: string; // ISO 8601 date string
     updatedAt: string; // ISO 8601 date string
-    user: User;
+    client: Client;    
     car: Car;
   }
+
+  // export interface User {
+  //   id: number;
+  //   name: string;
+  //   phoneNumber: string;
+  //   password: string;
+  //   status: string;
+  //   image_url: string;
+  //   permis: string;
+  //   identity: string;
+  //   createdAt: string; // ISO 8601 date string
+  //   updatedAt: string; // ISO 8601 date string
+  // }
 

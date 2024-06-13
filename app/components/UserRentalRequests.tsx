@@ -84,10 +84,10 @@ import {
                     <Image
                       borderRadius="full"
                       boxSize="50px"
-                      src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRptObCFSqjgs9qHPomG55uOyGO4ZEX11gZKg&usqp=CAU"}
-                      alt={rental.car.rental.name}
+                      src={rental.car.rental.image_url || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRptObCFSqjgs9qHPomG55uOyGO4ZEX11gZKg&usqp=CAU"}
+                      alt={rental.car.rental.user.name}
                     />
-                    <Text>{rental.user.name}</Text>
+                    <Text>{rental.client.user.name}</Text>
                   </Box>
                 </Td>
                 <Td>

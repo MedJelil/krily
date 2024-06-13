@@ -8,14 +8,15 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  // const { id } = request.query;
-
-//   if (!params.id) {
-//     return NextResponse.json({ error: "ID is required" }, { status: 400 });
-//   }
-
   const rental = await prisma.rental.findUnique({
     where: { id: Number(params.id) },
+    include: {
+      user: {
+        include: {
+          role: true,
+        },
+      },
+    },
   });
 
   if (!rental) {
@@ -37,13 +38,23 @@ export async function PUT(
     return NextResponse.json(validation.error.errors, { status: 400 });
   }
 
-  const updatedRental = await prisma.rental.update({
+  const rental = await prisma.rental.findUnique({
     where: { id: Number(params.id) },
+  });
+
+  const updatedUser = await prisma.user.update({
+    where: { id: rental?.userId },
     data: {
       name: body.name,
       phoneNumber: body.phoneNumber,
       password: body.password,
-      location: body.location 
+    },
+  });
+
+  const updatedRental = await prisma.rental.update({
+    where: { id: rental?.id },
+    data: {
+      location: body.location,
     },
   });
 
@@ -54,12 +65,16 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-
+  const rental = await prisma.rental.findUnique({
+    where: { id: Number(params.id) },
+  });
 
   await prisma.rental.delete({
     where: { id: Number(params.id) },
   });
-
+  await prisma.user.delete({
+    where: { id: rental?.userId },
+  });
   return NextResponse.json(
     { message: "rental deleted successfully" },
     { status: 200 }

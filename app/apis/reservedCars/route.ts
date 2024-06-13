@@ -14,7 +14,7 @@ export const reservedCarSchema = z.object({
       1,
       "Days must be at least 1 to indicate the car is reserved for at least one day."
     ),
-  userId: z
+  clientId: z
     .number()
     .int()
     .positive("User ID must be a positive integer representing a valid user."),
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       rental_date: body.rental_date,
       end_reservation_date: body.end_reservation_date,
       days: body.days,
-      userId: body.userId,
+      clientId: body.clientId,
       carId: body.carId,
     },
   });
@@ -50,7 +50,9 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   const reservedCars = await prisma.reservedCar.findMany({
     include: {
-      user: true,
+      client: {include: {
+        user: true
+      }},
       car: {
         include: {
           rental: true, // Include the rental attribute

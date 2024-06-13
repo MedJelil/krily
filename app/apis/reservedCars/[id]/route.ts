@@ -17,7 +17,9 @@ export async function GET(
   const reservedCar = await prisma.reservedCar.findUnique({
     where: { id: Number(params.id) },
     include: {
-      user: true,
+      client: {include: {
+        user: true
+      }},
       car: true,
     },
   });
@@ -42,17 +44,19 @@ export async function PUT(
   const reservedCar = await prisma.reservedCar.findUnique({
     where: { id: Number(params.id) },
     include: {
-      user: true,
+      client: {include: {
+        user: true
+      }},
       car: true,
     },
   });
   const newReservedCar = {
     days: body.days || reservedCar?.days,
-    userId: body.userId || reservedCar?.userId,
+    clientId: body.clientId || reservedCar?.clientId,
     carId: body.carId || reservedCar?.carId,
     status: body.status || reservedCar?.status,
     car: body.car || reservedCar?.car,
-    user: body.user || reservedCar?.user,
+    client: body.client || reservedCar?.client,
     rental_date: body.rental_date || reservedCar?.rental_date.toISOString(),
     end_reservation_date: body.end_reservation_date || reservedCar?.end_reservation_date.toISOString(),
   }
@@ -65,7 +69,7 @@ export async function PUT(
     where: { id: Number(params.id) },
     data: {
       days: newReservedCar.days,
-      userId: newReservedCar.userId,
+      clientId: newReservedCar.clientId,
       carId: newReservedCar.carId,
       status: newReservedCar.status,
     },
