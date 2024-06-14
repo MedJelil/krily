@@ -1,8 +1,15 @@
+"use client";
 import React from "react";
 import styles from "../styles/styles.module.css";
 import RadioButtons from "../components/RadioButtons";
+import { useFormState, useFormStatus } from "react-dom";
+import { authenticate } from "@/app/lib/actions";
+import { Button } from "@chakra-ui/react";
+import { ArrowRightIcon } from "@chakra-ui/icons";
 
 const Login = () => {
+  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+
   return (
     <div className={styles.container}>
       <div className={`max-w-lg w-full`}>
@@ -16,8 +23,7 @@ const Login = () => {
             <p className="mt-4 text-center text-gray-400">
               Connecter-vous Pour Continuer
             </p>
-            <form method="POST" action="#" className="mt-8 space-y-6">
-              
+            <form action={dispatch} className="mt-8 space-y-6">
               <div className="rounded-md shadow-sm">
                 <div>
                   <label className="sr-only" htmlFor="email">
@@ -57,13 +63,14 @@ const Login = () => {
               </div>
 
               <div>
-                <button
-                  className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-gray-900 bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  type="submit"
-                >
-                  Connecter
-                </button>
+                <LoginButton />
               </div>
+              {errorMessage && (
+                <>
+                  {/* <ExclamationCircleIcon className="h-5 w-5 text-red-500" /> */}
+                  <p className="text-sm text-red-500">{errorMessage}</p>
+                </>
+              )}
             </form>
           </div>
           <div className="px-8 py-4 bg-gray-700 text-center">
@@ -82,3 +89,16 @@ const Login = () => {
 };
 
 export default Login;
+
+function LoginButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-gray-900 bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      aria-disabled={pending}
+    >
+      Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+    </button>
+  );
+}
