@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Flex,
   Box,
@@ -7,7 +6,6 @@ import {
   FormLabel,
   Input,
   InputGroup,
-  HStack,
   InputRightElement,
   Stack,
   Button,
@@ -17,7 +15,6 @@ import {
   Link,
   Radio,
   RadioGroup,
-  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
@@ -25,53 +22,23 @@ import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { clientSchema, rentalSchema } from "./page";
 
-const clientSchema = z.object({
-  name: z
-    .string()
-    .regex(/^[a-zA-Z\s'-]+$/, "Invalid name. Only alphabets allowed."),
-  phoneNumber: z.string().regex(/^[234]\d{7}$/, "Invalid telephone number."),
-  password: z
-    .string()
-    .regex(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-      "Password must be at least 8 characters long and include both letters and numbers."
-    ),
-});
-
-const rentalSchema = z.object({
-  name: z
-    .string()
-    .regex(/^[a-zA-Z\s'-]+$/, "Invalid name. Only alphabets allowed."),
-  phoneNumber: z.string().regex(/^[234]\d{7}$/, "Invalid telephone number."),
-  password: z
-    .string()
-    .regex(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-      "Password must be at least 8 characters long and include both letters and numbers."
-    ),
-  location: z.string(),
-});
-
-const Signup = () => {
+export const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [userType, setUserType] = useState("client");
   const toast = useToast();
-  const router = useRouter();
-
 
   const schema = userType === "client" ? clientSchema : rentalSchema;
 
   type RentalFormData = z.infer<typeof rentalSchema>;
   type ClientFormData = z.infer<typeof clientSchema>;
 
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RentalFormData >({
+  } = useForm<RentalFormData>({
     resolver: zodResolver(schema),
   });
 
@@ -82,26 +49,18 @@ const Signup = () => {
       if (result) {
         const showToast = () =>
           toast({
-            title: "Account created succesfuly.",
-            description: "We've create your account.",
+            title: "Car updated succesfuly.",
+            description: "We've update your car for you.",
             status: "success",
             duration: 9000,
             isClosable: true,
           });
-        router.push(`/Login`);
+        router.push(`/rental/cars/details/${carData.id}`);
         showToast();
       }
     } catch (error) {
       console.error("Error registering user:", error);
-      const showToast = () =>
-        toast({
-          title: "failed to create user account", 
-          description: "Something went wrong while creating user account",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-      showToast();
+      alert("Registration failed. Please try again.");
     }
   };
 
@@ -112,7 +71,13 @@ const Signup = () => {
       justify={"center"}
       bg={useColorModeValue("gray.50", "gray.800")}
     >
-      <Stack spacing={8} mx={"auto"} w={{ base: "sm", md: "lg" }} py={12} px={6}>
+      <Stack
+        spacing={8}
+        mx={"auto"}
+        w={{ base: "sm", md: "lg" }}
+        py={12}
+        px={6}
+      >
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"}>
             Sign up
@@ -150,13 +115,17 @@ const Signup = () => {
                 <FormControl id="name" isRequired>
                   <FormLabel>First Name</FormLabel>
                   <Input type="text" {...register("name")} />
-                  {errors.name && <Text color="red.500">{errors.name.message}</Text>}
+                  {errors.name && (
+                    <Text color="red.500">{errors.name.message}</Text>
+                  )}
                 </FormControl>
               </Box>
               <FormControl id="phoneNumber" isRequired>
                 <FormLabel>Phone Number</FormLabel>
                 <Input type="text" {...register("phoneNumber")} />
-                {errors.phoneNumber && <Text color="red.500">{errors.phoneNumber.message}</Text>}
+                {errors.phoneNumber && (
+                  <Text color="red.500">{errors.phoneNumber.message}</Text>
+                )}
               </FormControl>
               <FormControl id="password" isRequired>
                 <FormLabel>Password</FormLabel>
@@ -176,13 +145,17 @@ const Signup = () => {
                     </Button>
                   </InputRightElement>
                 </InputGroup>
-                {errors.password && <Text color="red.500">{errors.password.message}</Text>}
+                {errors.password && (
+                  <Text color="red.500">{errors.password.message}</Text>
+                )}
               </FormControl>
               {userType === "rental" && (
                 <FormControl id="location" isRequired>
                   <FormLabel>Location</FormLabel>
                   <Input type="text" {...register("location")} />
-                  {errors.location && <Text color="red.500">{errors.location.message}</Text>}
+                  {errors.location && (
+                    <Text color="red.500">{errors.location.message}</Text>
+                  )}
                 </FormControl>
               )}
               <Stack spacing={10} pt={2}>
@@ -211,5 +184,3 @@ const Signup = () => {
     </Flex>
   );
 };
-
-export default Signup;

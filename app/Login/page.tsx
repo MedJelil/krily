@@ -1,11 +1,10 @@
 "use client";
 import React from "react";
 import styles from "../styles/styles.module.css";
-import RadioButtons from "../components/RadioButtons";
 import { useFormState, useFormStatus } from "react-dom";
 import { authenticate } from "@/app/lib/actions";
-import { Button } from "@chakra-ui/react";
 import { ArrowRightIcon } from "@chakra-ui/icons";
+import Link from "next/link";
 
 const Login = () => {
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
@@ -33,7 +32,7 @@ const Login = () => {
                     placeholder="Numero Du Telephone"
                     className={`appearance-none relative block w-full px-3 py-3 border border-gray-700 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm ${styles.inputNumber}`}
                     type="number"
-                    name="telephone"
+                    name="phoneNumber"
                     id="telephone"
                   />
                 </div>
@@ -75,12 +74,12 @@ const Login = () => {
           </div>
           <div className="px-8 py-4 bg-gray-700 text-center">
             <span className="text-gray-400">Je n'ai pas de compte?</span>
-            <a
+            <Link
               className="font-medium text-indigo-500 hover:text-indigo-400"
-              href="Signup"
+              href="/Signup"
             >
               Enregistrer
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
     background-color: #f3f4f6; /* Optional: background color of the page */
+    padding: 5%;
   }
   
 
