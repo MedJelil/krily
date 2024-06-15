@@ -1,46 +1,33 @@
-"use client";
-import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  Button,
-  Spinner,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { Wrap, WrapItem, Button, useToast, Spinner, useDisclosure, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay } from "@chakra-ui/react";
 import axios from "axios";
-import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import React, { useRef, useState } from "react";
 
-interface props {
+interface Props {
   id: number;
 }
 
-const DeleteButton = ({ id }: props) => {
-  const [isDeleting, setDeleting] = useState(false);
+const AdminActions = ({ id }: Props) => {
+  const [isVerifing, setVerifing] = useState(false);
+  const [isBlocking, setBlockig] = useState(false);
   const router = useRouter();
   const toast = useToast();
 
-  const clickHandler = async (id: number) => {
-    setDeleting(true);
+  const applyAction = async (action: string) => {
     try {
-      const result = await axios.delete(`/apis/cars/${id}`);
+      const result = await axios.put(`/apis/cars/${id}`, { status: action });
       if (result) {
         const showToast = () =>
           toast({
-            title: "Car deleted succesfuly.",
-            description: "We've delete your car for you.",
+            title: `Car ${action} succesfuly.`,
+            description: `We've ${action} the car for you.`,
             status: "success",
             duration: 9000,
             isClosable: true,
           });
         showToast();
       }
-      router.push("/rental/cars");
+      router.push("/admin/cars");
     } catch (error) {
       if (error) {
         const showToast = () =>
@@ -60,14 +47,17 @@ const DeleteButton = ({ id }: props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <>
+    <Wrap spacing={4} display={"flex"} alignItems={"center"}>
+      <WrapItem>
+
+      <>
       <Button
         colorScheme="red"
         onClick={onOpen}
-        disabled={isDeleting}
+        disabled={isBlocking}
         size={{ base: "sm", md: "md" }}
       >
-        {isDeleting ? <Spinner /> : "Delete"}
+        {isBlocking ? <Spinner /> : "Block"}
       </Button>
 
       <AlertDialog
@@ -78,7 +68,7 @@ const DeleteButton = ({ id }: props) => {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete
+              Block
             </AlertDialogHeader>
 
             <AlertDialogBody>
@@ -91,21 +81,36 @@ const DeleteButton = ({ id }: props) => {
               </Button>
               <Button
                 colorScheme="red"
-                onClick={() => clickHandler(id)}
+                onClick={() => applyAction("BLOCKED")}
                 ml={3}
-                disabled={isDeleting}
+                disabled={isBlocking}
               >
-                {isDeleting ? <Spinner /> : "Delete"}
+                {isBlocking ? <Spinner /> : "Block"}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialogOverlay>
       </AlertDialog>
     </>
+        {/* <Button
+          colorScheme="red"
+          size={{ base: "sm", md: "md" }}
+          onClick={() => applyAction("BLOCKED")}
+        >
+          {isBlocking ? <Spinner /> : "Block"}
+        </Button> */}
+      </WrapItem>
+      <WrapItem>
+        <Button
+          colorScheme="blue"
+          size={{ base: "sm", md: "md" }}
+          onClick={() => applyAction("VERIFIED")}
+        >
+          {isVerifing ? <Spinner /> : "Verify"}
+        </Button>
+      </WrapItem>
+    </Wrap>
   );
 };
 
-export default DeleteButton;
-// function useDisclosure(): { isOpen: any; onOpen: any; onClose: any } {
-//   throw new Error("Function not implemented.");
-// }
+export default AdminActions;

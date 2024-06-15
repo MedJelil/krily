@@ -8,11 +8,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  // const { id } = request.query;
 
-  //   if (!params.id) {
-  //     return NextResponse.json({ error: 'ID is required' }, { status: 400 });
-  //   }
 
   const car = await prisma.car.findUnique({
     where: { id: Number(params.id) },
@@ -29,10 +25,29 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  // const { id } = request.query;
   const body = await request.json();
-  const validation = carSchema.safeParse(body);
 
+  const car = await prisma.car.findUnique({
+    where: { id: Number(params.id) },
+  });
+
+  const newCar = {
+    model: body.model || car?.model,
+    brand: body.brand || car?.brand,
+    gearBox: body.gearBox || car?.gearBox,
+    fuel: body.fuel || car?.fuel,
+    main_image_url: body.main_image_url || car?.main_image_url,
+    image1_url: body.image1_url || car?.image1_url || "",
+    image2_url: body.image2_url || car?.image2_url || "",
+    silenders: body.silenders || car?.silenders,
+    status: body.status || car?.status,
+    color: body.color || car?.color,
+    year: body.year || car?.year,
+    daily_price: body.daily_price || car?.daily_price,
+    rentalId: body.rentalId || car?.rentalId,
+  };
+
+  const validation = carSchema.safeParse(newCar);
   if (!validation.success) {
     return NextResponse.json(validation.error.errors, { status: 400 });
   }
@@ -40,18 +55,19 @@ export async function PUT(
   const updatedCar = await prisma.car.update({
     where: { id: Number(params.id) },
     data: {
-      model: body.model,
-      brand: body.brand,
-      gearBox: body.gearBox,
-      fuel: body.fuel,
-      main_image_url: body.main_image_url,
-      image1_url: body.image1_url || "",
-      image2_url: body.image2_url || "",
-      silenders: body.silenders,
-      color: body.color,
-      year: body.year,
-      daily_price: body.daily_price,
-      rentalId: body.rentalId,
+      model: newCar.model,
+      brand: newCar.brand,
+      gearBox: newCar.gearBox,
+      fuel: newCar.fuel,
+      main_image_url: newCar.main_image_url,
+      image1_url: newCar.image1_url,
+      image2_url: newCar.image2_url,
+      silenders: newCar.silenders,
+      color: newCar.color,
+      status: newCar.status,
+      year: newCar.year,
+      daily_price: newCar.daily_price,
+      rentalId: newCar.rentalId,
     },
   });
 

@@ -11,19 +11,20 @@ import getCroppedImageUrl from "@/app/image-url";
 import { CarData } from "../rental/cars/edit/[id]/page";
 import { TbAutomaticGearbox, TbManualGearbox } from "react-icons/tb";
 import Link from "next/link";
+import { Car } from "../interfaces";
 
 interface Props {
-  car: CarData;
+  car: Car;
   showed_for: string;
 }
-const GameCard = ({ car, showed_for }: Props) => {
+const carCard = ({ car, showed_for }: Props) => {
   return (
     <Link href={`/${showed_for}/cars/details/${car.id}`}>
       <Card maxW="sm" maxH="sm" overflow={"hidden"}>
         <Image
           src={getCroppedImageUrl(car.main_image_url)}
           alt={car.model}
-          h="sm"
+          h="230px"
         />
         <CardBody px={1}>
           <Heading size="md" mb={1} >
@@ -32,16 +33,16 @@ const GameCard = ({ car, showed_for }: Props) => {
           <HStack justifyContent={"space-between"} mb={1}>
             <HStack>
               <Text>{showed_for == "user" && "Boit Vitess"}</Text>
-              {showed_for == "rental" ? (
+              {showed_for != "user" ? (
                 <Text 
                   bg={
                     car.status == "BLOCKED"
-                      ? "red"
+                      ? "#E53E3E"
                       : car.status == "IN_PROGRESS"
                       ? "yellowgreen"
                       : car.status == "NOT_VERIFIED"
                       ? "gray"
-                      : "blue"
+                      : "#3182CE"
                   }
                   borderRadius="lg"
                   p={1}
@@ -54,7 +55,8 @@ const GameCard = ({ car, showed_for }: Props) => {
                 <TbManualGearbox />
               )}
             </HStack>
-            <Text>{car.daily_price} MRU/jour</Text>
+            {showed_for != "admin" && <Text>{car.daily_price} MRU/jour</Text>}
+            {showed_for == "admin" && <Text>{car.rental.user.name}</Text>}
           </HStack>
         </CardBody>
       </Card>
@@ -62,4 +64,4 @@ const GameCard = ({ car, showed_for }: Props) => {
   );
 };
 
-export default GameCard;
+export default carCard;

@@ -8,7 +8,7 @@ export const carSchema = z.object({
   brand: z.string().min(1, "Brand name is required."),
   gearBox: z.string().min(1, "Gearbox type is required."),
   fuel: z.string().min(1, "Fuel type is required."),
-  // status: z.enum(['VERIFIED', 'IN_PROGRESS', 'NOT_VERIFIED', 'BLOCKED']),
+  status: z.enum(['VERIFIED', 'IN_PROGRESS', 'NOT_VERIFIED', 'BLOCKED']).optional(),
   main_image_url: z.string().url("Main image is required."),
   image1_url: z.string().optional(),
   image2_url: z.string().optional(),
@@ -53,6 +53,14 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  const cars = await prisma.car.findMany();
+  const cars = await prisma.car.findMany({
+    include: {
+      rental: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  });
   return NextResponse.json(cars, { status: 200 });
 }

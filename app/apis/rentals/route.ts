@@ -7,6 +7,8 @@ export const rentalSchema = z.object({
     .string()
     .regex(/^[a-zA-Z\s'-]+$/, "Invalid name. Only alphabets allowed."),
   phoneNumber: z.string().regex(/^[234]\d{7}$/, "Invalid telephone number."),
+  status: z.enum(['VERIFIED', 'IN_PROGRESS', 'NOT_VERIFIED', 'BLOCKED']).optional(),
+  image_url: z.string().optional(),
   password: z
     .string()
     .regex(

@@ -29,36 +29,50 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  // const { id } = request.query;
   const body = await request.json();
-  const validation = clientSchema.safeParse(body);
 
+  const client = await prisma.client.findUnique({
+    where: { id: Number(params.id) },
+    include: {
+      user: true,
+    },
+  });
+
+  const newClient = {
+    name: body.name || client?.user.name,
+    phoneNumber: body.phoneNumber || client?.user.phoneNumber,
+    password: body.password || client?.user.password,
+    image_url: body.image_url || client?.image_url || "",
+    permis: body.permis || client?.permis || "",
+    identity: body.identity || client?.identity || "",
+    status: body.status || client?.status
+  };
+
+  const validation = clientSchema.safeParse(newClient);
   if (!validation.success) {
     return NextResponse.json(validation.error.errors, { status: 400 });
   }
 
-  const client = await prisma.client.findUnique({
-    where: { id: Number(params.id) },
-  });
-
   const updatedUser = await prisma.user.update({
     where: { id: client?.userId },
     data: {
-      name: body.name,
-      phoneNumber: body.phoneNumber,
-      password: body.password,
-    },
-  });
-  const updatedclient = await prisma.client.update({
-    where: { id: Number(params.id) },
-    data: {
-      image_url: body.image_url || "",
-      permis: body.permis || "",
-      identity: body.identity || "",
+      name: newClient.name,
+      phoneNumber: newClient.phoneNumber,
+      password: newClient.password,
     },
   });
 
-  return NextResponse.json(updatedclient, { status: 200 });
+  const updatedClient = await prisma.client.update({
+    where: { id: Number(params.id) },
+    data: {
+      image_url: newClient.image_url,
+      permis: newClient.permis,
+      identity: newClient.identity,
+      status: newClient.status,
+    },
+  });
+
+  return NextResponse.json(updatedClient, { status: 200 });
 }
 
 export async function DELETE(

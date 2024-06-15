@@ -13,6 +13,7 @@ import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
 import PopupForm from "./PopupForm";
 import RentalPopup from "./RentalPopup";
+import AdminActions from "./AdminActions";
 
 interface Props {
   car: CarData;
@@ -35,6 +36,7 @@ const CarDetails = ({ car, showed_for }: Props) => {
             <PopupForm carId={car.id} />
             <RentalPopup carId={car.id} />
           </HStack>}
+          {showed_for == "admin" && <AdminActions id={car.id} />}
         </HStack>
         <Box
           mx="auto"

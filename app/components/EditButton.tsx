@@ -10,7 +10,12 @@ interface props {
 const EditButton = ({ link }: props) => {
   return (
     <Link href={link}>
-      <Button leftIcon={<EditIcon />} colorScheme="yellow" variant="solid">
+      <Button
+        leftIcon={<EditIcon />}
+        colorScheme="yellow"
+        variant="solid"
+        size={{ base: "sm", md: "md" }}
+      >
         Edit
       </Button>
     </Link>

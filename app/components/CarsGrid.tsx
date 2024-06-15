@@ -4,6 +4,7 @@ import CarCard from "./CarCard";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { CarData } from "../rental/cars/edit/[id]/page";
+import { Car } from "../interfaces";
 
 interface props {
   showed_for: string;
@@ -11,7 +12,7 @@ interface props {
 
 const CarsGrid = ({showed_for}: props) => {
 
-  const [cars, setCars] = useState<CarData[]>();
+  const [cars, setCars] = useState<Car[]>();
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const CarsGrid = ({showed_for}: props) => {
         {/* {error && <Text>{error}</Text>} */}
         <SimpleGrid
           spacing={4}
-          columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
+          columns={{ sm: 1, md: 2, lg: 4, xl: 5 }}
           padding={10}
         >
           {cars.map((car) => (
