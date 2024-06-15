@@ -55,7 +55,11 @@ export async function GET() {
       }},
       car: {
         include: {
-          rental: true, // Include the rental attribute
+          rental: {
+            include: {
+              user: true, // Include the rental attribute
+            },
+          },
         },
       },
     },

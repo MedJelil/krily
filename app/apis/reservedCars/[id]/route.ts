@@ -8,11 +8,6 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  // const { id } = request.query;
-
-  // if (!params.id) {
-  //   return NextResponse.json({ error: 'ID is required' }, { status: 400 });
-  // }
 
   const reservedCar = await prisma.reservedCar.findUnique({
     where: { id: Number(params.id) },
@@ -20,7 +15,15 @@ export async function GET(
       client: {include: {
         user: true
       }},
-      car: true,
+      car: {
+        include: {
+          rental: {
+            include: {
+              user: true, // Include the rental attribute
+            },
+          },
+        },
+      },
     },
   });
 
@@ -38,7 +41,6 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  // const { id } = request.query;
   const body = await request.json();
   
   const reservedCar = await prisma.reservedCar.findUnique({

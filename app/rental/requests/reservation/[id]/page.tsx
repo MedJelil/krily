@@ -24,29 +24,29 @@ import AcceptButton from "@/app/components/AcceptButton";
 import RefuseButton from "@/app/components/RefuseButton";
 // import AcceptButton from "@/app/components/AcceptButton";
 
-const RentalDetail = ({ params }: { params: { id: string } }) => {
+const ReservationDetails = ({ params }: { params: { id: string } }) => {
   const id = +params.id;
-  const [rental, setRental] = useState<Reservation | null>(null);
+  const [reservation, setReservation] = useState<Reservation | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchRental = async () => {
+    const fetchReservations = async () => {
       try {
         const response = await axios.get(`/apis/reservedCars/${id}`);
-        setRental(response.data);
+        setReservation(response.data);
       } catch (err) {
-        setError("Failed to fetch rental details.");
+        setError("Failed to fetch reservation details.");
       }
     };
 
-    fetchRental();
+    fetchReservations();
   }, []);
 
   if (error) {
     return <Text>{error}</Text>;
   }
 
-  if (!rental) {
+  if (!reservation) {
     return <Text>Loading...</Text>;
   }
 
@@ -64,10 +64,10 @@ const RentalDetail = ({ params }: { params: { id: string } }) => {
             <Image
               borderRadius="full"
               boxSize="100px"
-              src={rental.client.image_url || "https://bit.ly/dan-abramov"}
-              alt={rental.client.user.name}
+              src={reservation.client.image_url || "https://bit.ly/dan-abramov"}
+              alt={reservation.client.user.name}
             />
-            <Heading>{rental.client.user.name}</Heading>
+            <Heading>{reservation.client.user.name}</Heading>
           </Stack>
           <Stack
             direction={{ base: "column", md: "row" }}
@@ -80,57 +80,57 @@ const RentalDetail = ({ params }: { params: { id: string } }) => {
                 borderRadius="md"
                 boxSize={{ sm: "sm", lg: "sm" }}
                 h={{ sm: "sm", lg: "300px" }}
-                src={rental.car.main_image_url}
-                alt={rental.car.brand}
+                src={reservation.car.main_image_url}
+                alt={reservation.car.brand}
               />
             </Box>
             <Box mt={4}>
-              <Heading size="md">Rental Details</Heading>
+              <Heading size="md">Reservation Details</Heading>
               <Table variant="simple" size="sm">
                 <Tbody>
                   <Tr>
-                    <Th>Rental Date</Th>
-                    <Td>{new Date(rental.rental_date).toLocaleDateString()}</Td>
+                    <Th>Reservation Date</Th>
+                    <Td>{new Date(reservation.rental_date).toLocaleDateString()}</Td>
                   </Tr>
                   <Tr>
-                    <Th>Rental Time </Th>
-                    <Td>{new Date(rental.rental_date).toLocaleTimeString()}</Td>
+                    <Th>Reservation Time </Th>
+                    <Td>{new Date(reservation.rental_date).toLocaleTimeString()}</Td>
                   </Tr>
                   <Tr>
                     <Th>Days</Th>
-                    <Td>{rental.days}</Td>
+                    <Td>{reservation.days}</Td>
                   </Tr>
                   <Tr>
                     <Th>Model</Th>
-                    <Td>{rental.car.model}</Td>
+                    <Td>{reservation.car.model}</Td>
                   </Tr>
                   <Tr>
                     <Th>Brand</Th>
-                    <Td>{rental.car.brand}</Td>
+                    <Td>{reservation.car.brand}</Td>
                   </Tr>
                   <Tr>
                     <Th>Year</Th>
-                    <Td>{rental.car.year}</Td>
+                    <Td>{reservation.car.year}</Td>
                   </Tr>
                   <Tr>
                     <Th>Status</Th>
-                    <Td>{rental.status}</Td>
+                    <Td>{reservation.status}</Td>
                   </Tr>
                 </Tbody>
               </Table>
-              {rental.status == "IN_PROGRESS" && (
+              {reservation.status == "IN_PROGRESS" && (
                 <HStack mt={4} justifyContent={"center"}>
-                  <AcceptButton id={rental.id} used_for="reservation" />
-                  <RefuseButton id={rental.id} used_for={"reservation"} />
+                  <AcceptButton id={reservation.id} used_for="reservation" />
+                  <RefuseButton id={reservation.id} used_for={"reservation"} />
                 </HStack>
               )}
-              {rental.status == "NOT_VERIFIED" && (
+              {reservation.status == "NOT_VERIFIED" && (
                 <Alert status="error">
                   <AlertIcon />
                   Request refused
                 </Alert>
               )}
-              {rental.status == "VERIFIED" && (
+              {reservation.status == "VERIFIED" && (
                 <Alert status="success">
                   <AlertIcon />
                   Requesr Accepted
@@ -144,4 +144,4 @@ const RentalDetail = ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default RentalDetail;
+export default ReservationDetails;

@@ -15,7 +15,15 @@ export async function GET(
       client: {include: {
         user: true
       }},
-      car: true,
+      car: {
+        include: {
+          rental: {
+            include: {
+              user: true, // Include the rental attribute
+            },
+          },
+        },
+      },
     },
   });
 
