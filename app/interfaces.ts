@@ -18,7 +18,7 @@ export interface Client {
 
   }
 
-  interface Rental {
+ export interface Rental {
     id: number;
     user: User;
     status: string; 

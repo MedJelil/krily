@@ -16,6 +16,9 @@ export async function GET(
 
   const client = await prisma.client.findUnique({
     where: { id: Number(params.id) },
+    include: {
+      user: true,
+    }
   });
 
   if (!client) {

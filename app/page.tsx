@@ -6,6 +6,7 @@ import CarsGrid from "./components/CarsGrid";
 import PopupForm from "./components/PopupForm";
 import RequestRow from "./components/ReservationRequests";
 import ReservationRequests from "./components/ReservationRequests";
+import Profile from "./components/Profile";
 
 
 
@@ -31,6 +32,7 @@ export default function Home() {
       </Box>
       {/* <CarsGrid showed_for="user"/> */}
       {/* <ReservationRequests /> */}
+      {/* <Profile /> */}
 
     </>
   );

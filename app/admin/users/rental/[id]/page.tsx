@@ -19,20 +19,21 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { RentedCar } from "@/app/interfaces";
+import { Rental } from "@/app/interfaces";
 import CancelButton from "@/app/components/CancelButton";
 import EditRentalButton from "@/app/components/EditRentalButton";
 import Loader from "@/app/components/Loader";
+import AdminActionsOnUsers from "@/app/components/AdminActionsOnUsers";
 
 const RentalDetail = ({ params }: { params: { id: string } }) => {
   const id = +params.id;
-  const [rental, setRental] = useState<RentedCar | null>(null);
+  const [rental, setRental] = useState<Rental | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchRental = async () => {
       try {
-        const response = await axios.get(`/apis/rentedCars/${id}`);
+        const response = await axios.get(`/apis/rentals/${id}`);
         setRental(response.data);
       } catch (err) {
         setError("Failed to fetch Rental details.");
@@ -69,11 +70,11 @@ const RentalDetail = ({ params }: { params: { id: string } }) => {
                 borderRadius="full"
                 boxSize="100px"
                 src={
-                  rental.car.rental.image_url || "https://bit.ly/dan-abramov"
+                  rental.image_url || "https://bit.ly/dan-abramov"
                 }
-                alt={rental.car.rental.user.name}
+                alt={rental.user.name}
               />
-              <Heading>{rental.client.user.name}</Heading>
+              <Heading>{rental.user.name}</Heading>
             </Stack>
             <Stack
               direction={{ base: "column", md: "row" }}
@@ -82,74 +83,42 @@ const RentalDetail = ({ params }: { params: { id: string } }) => {
               alignItems={"start"}
             >
               <Box mt={4}>
-                <Image
+                {/* <Image
                   borderRadius="md"
                   boxSize={{ sm: "sm", lg: "sm" }}
                   h={{ sm: "sm", lg: "300px" }}
                   src={rental.car.main_image_url}
                   alt={rental.car.brand}
-                />
+                /> */}
               </Box>
               <Box mt={4}>
                 <Heading size="md">Rental Details</Heading>
                 <Table variant="simple" size="sm">
                   <Tbody>
                     <Tr>
-                      <Th>Rental Date</Th>
+                      <Th>registration Date</Th>
                       <Td>{new Date(rental.createdAt).toLocaleDateString()}</Td>
                     </Tr>
                     <Tr>
-                      <Th>Rental Time </Th>
-                      <Td>{new Date(rental.createdAt).toLocaleTimeString()}</Td>
+                      <Th>Nom </Th>
+                      <Td>{rental.user.name}</Td>
                     </Tr>
                     <Tr>
-                      <Th>Days</Th>
-                      <Td>{rental.days}</Td>
+                      <Th>Contact</Th>
+                      <Td>{rental.user.phoneNumber}</Td>
                     </Tr>
                     <Tr>
-                      <Th>Model</Th>
-                      <Td>{rental.car.model}</Td>
+                      <Th>Localisation</Th>
+                      <Td>{rental.location}</Td>
                     </Tr>
                     <Tr>
-                      <Th>Brand</Th>
-                      <Td>{rental.car.brand}</Td>
-                    </Tr>
-                    <Tr>
-                      <Th>Year</Th>
-                      <Td>{rental.car.year}</Td>
-                    </Tr>
-                    <Tr>
-                      <Th>Status</Th>
+                      <Th>status</Th>
                       <Td>{rental.status}</Td>
                     </Tr>
+                    
                   </Tbody>
                 </Table>
-                {rental.status == "IN_PROGRESS" && (
-                  <>
-                    <Alert status="info">
-                      <AlertIcon />
-                      Pending request
-                    </Alert>
-                    <Box display={"flex"} justifyContent={"end"} mt={1}>
-                      <HStack mt={4} justifyContent={"center"}>
-                        <CancelButton id={rental.id} used_for={"rental"} />
-                        <EditRentalButton id={rental.id} />
-                      </HStack>
-                    </Box>
-                  </>
-                )}
-                {rental.status == "NOT_VERIFIED" && (
-                  <Alert status="error">
-                    <AlertIcon />
-                    Request refused
-                  </Alert>
-                )}
-                {rental.status == "VERIFIED" && (
-                  <Alert status="success">
-                    <AlertIcon />
-                    Requesr Accepted
-                  </Alert>
-                )}
+                <AdminActionsOnUsers id={rental.id} user="rental"/>
               </Box>
             </Stack>
           </CardBody>

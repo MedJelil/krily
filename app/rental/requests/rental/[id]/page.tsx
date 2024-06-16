@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { Reservation } from "@/app/interfaces";
 import AcceptButton from "@/app/components/AcceptButton";
 import RefuseButton from "@/app/components/RefuseButton";
+import Loader from "@/app/components/Loader";
 
 const RentalDetail = ({ params }: { params: { id: string } }) => {
   const id = +params.id;
@@ -45,9 +46,9 @@ const RentalDetail = ({ params }: { params: { id: string } }) => {
     return <Text>{error}</Text>;
   }
 
-  if (!rental) {
-    return <Text>Loading...</Text>;
-  }
+  if (!rental && !error) return <Loader />;
+
+  if (rental)
 
   return (
     <Box

@@ -1,4 +1,17 @@
-import { Wrap, WrapItem, Button, useToast, Spinner, useDisclosure, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay } from "@chakra-ui/react";
+import {
+  Wrap,
+  WrapItem,
+  Button,
+  useToast,
+  Spinner,
+  useDisclosure,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+} from "@chakra-ui/react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
@@ -49,56 +62,48 @@ const AdminActions = ({ id }: Props) => {
   return (
     <Wrap spacing={4} display={"flex"} alignItems={"center"}>
       <WrapItem>
+        <>
+          <Button
+            colorScheme="red"
+            onClick={onOpen}
+            disabled={isBlocking}
+            size={{ base: "sm", md: "md" }}
+          >
+            {isBlocking ? <Spinner /> : "Block"}
+          </Button>
 
-      <>
-      <Button
-        colorScheme="red"
-        onClick={onOpen}
-        disabled={isBlocking}
-        size={{ base: "sm", md: "md" }}
-      >
-        {isBlocking ? <Spinner /> : "Block"}
-      </Button>
+          <AlertDialog
+            isOpen={isOpen}
+            leastDestructiveRef={cancelRef}
+            onClose={onClose}
+          >
+            <AlertDialogOverlay>
+              <AlertDialogContent>
+                <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                  Block
+                </AlertDialogHeader>
 
-      <AlertDialog
-        isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
-        onClose={onClose}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Block
-            </AlertDialogHeader>
+                <AlertDialogBody>
+                  Are you sure? You can't undo this action afterwards.
+                </AlertDialogBody>
 
-            <AlertDialogBody>
-              Are you sure? You can't undo this action afterwards.
-            </AlertDialogBody>
-
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
-                Cancel
-              </Button>
-              <Button
-                colorScheme="red"
-                onClick={() => applyAction("BLOCKED")}
-                ml={3}
-                disabled={isBlocking}
-              >
-                {isBlocking ? <Spinner /> : "Block"}
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
-    </>
-        {/* <Button
-          colorScheme="red"
-          size={{ base: "sm", md: "md" }}
-          onClick={() => applyAction("BLOCKED")}
-        >
-          {isBlocking ? <Spinner /> : "Block"}
-        </Button> */}
+                <AlertDialogFooter>
+                  <Button ref={cancelRef} onClick={onClose}>
+                    Cancel
+                  </Button>
+                  <Button
+                    colorScheme="red"
+                    onClick={() => applyAction("BLOCKED")}
+                    ml={3}
+                    disabled={isBlocking}
+                  >
+                    {isBlocking ? <Spinner /> : "Block"}
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialogOverlay>
+          </AlertDialog>
+        </>
       </WrapItem>
       <WrapItem>
         <Button

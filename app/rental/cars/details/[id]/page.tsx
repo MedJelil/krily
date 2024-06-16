@@ -1,6 +1,7 @@
 "use client";
 
 import CarDetails from "@/app/components/CarDetails";
+import Loader from "@/app/components/Loader";
 import { CarData } from "@/app/rental/cars/edit/[id]/page";
 import { Alert, AlertDescription, AlertIcon, AlertTitle } from "@chakra-ui/react";
 import axios from "axios";
@@ -22,24 +23,32 @@ const page = ({ params }: { params: { id: string } }) => {
 
     fetchCar();
   }, []);
-  if (car) return <CarDetails car={car} showed_for="rental" />;
-  return <Alert
-  status='error'
-  variant='subtle'
-  flexDirection='column'
-  alignItems='center'
-  justifyContent='center'
-  textAlign='center'
-  height='200px'
->
-  <AlertIcon boxSize='40px' mr={0} />
-  <AlertTitle mt={4} mb={1} fontSize='lg'>
-    No results found
-  </AlertTitle>
-  <AlertDescription maxWidth='sm'>
-    Sorry we don't find result maybe there is a problem on the server please try again.
-  </AlertDescription>
-</Alert>;
+  if (!car && !error) return <Loader />;
+
+  if (error)
+    return (
+      <>
+        <Alert
+          status="error"
+          variant="subtle"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+          height="200px"
+        >
+          <AlertIcon boxSize="40px" mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize="lg">
+            No results found
+          </AlertTitle>
+          <AlertDescription maxWidth="sm">
+            Sorry we don't find result maybe there is a problem on the server
+            please try again.
+          </AlertDescription>
+        </Alert>
+      </>
+    );
+  else if (car) return <CarDetails car={car} showed_for="rental" />;
 };
 
 export default page;
