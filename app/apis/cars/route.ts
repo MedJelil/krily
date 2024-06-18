@@ -2,13 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 import prisma from "@/prisma/client";
 
-
 export const carSchema = z.object({
   model: z.string().min(1, "Model name is required."),
   brand: z.string().min(1, "Brand name is required."),
   gearBox: z.string().min(1, "Gearbox type is required."),
   fuel: z.string().min(1, "Fuel type is required."),
-  status: z.enum(['VERIFIED', 'IN_PROGRESS', 'NOT_VERIFIED', 'BLOCKED']).optional(),
+  status: z
+    .enum(["VERIFIED", "IN_PROGRESS", "NOT_VERIFIED", "BLOCKED"])
+    .optional(),
   main_image_url: z.string().url("Main image is required."),
   image1_url: z.string().optional(),
   image2_url: z.string().optional(),
@@ -46,14 +47,22 @@ export async function POST(request: NextRequest) {
       daily_price: body.daily_price,
       rentalId: body.rentalId,
     },
-  }); 
+  });
 
-  
   return NextResponse.json(newCar, { status: 201 });
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const url = new URL(request.url);
+  const query = url.searchParams.get("query") || "";
+
   const cars = await prisma.car.findMany({
+    where: {
+      OR: [
+        { model: { contains: query } },
+        { brand: { contains: query } },
+      ],
+    },
     include: {
       rental: {
         include: {
@@ -64,3 +73,7 @@ export async function GET() {
   });
   return NextResponse.json(cars, { status: 200 });
 }
+
+
+
+

@@ -7,10 +7,17 @@ import PopupForm from "./components/PopupForm";
 import RequestRow from "./components/ReservationRequests";
 import ReservationRequests from "./components/ReservationRequests";
 import Profile from "./components/Profile";
+import SearchBar from "./components/SearchBar";
 
 
 
 export default function Home() {
+
+  const handleSearch = (query: string) => {
+    console.log("Search query:", query);
+    // Handle the search logic here
+  };
+
   const toast = useToast()
   const clickHandler = () =>  toast({
     title: 'Account created.',
@@ -33,6 +40,11 @@ export default function Home() {
       {/* <CarsGrid showed_for="user"/> */}
       {/* <ReservationRequests /> */}
       {/* <Profile /> */}
+
+      <Box p={4}>
+      <SearchBar onSearch={handleSearch} />
+      {/* Other components and content */}
+    </Box>
 
     </>
   );
