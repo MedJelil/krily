@@ -8,6 +8,7 @@ import RequestRow from "./components/ReservationRequests";
 import ReservationRequests from "./components/ReservationRequests";
 import Profile from "./components/Profile";
 import SearchBar from "./components/SearchBar";
+import { UseCurrentUser } from "./hooks/useCurrentUser";
 
 
 
@@ -17,7 +18,6 @@ export default function Home() {
     console.log("Search query:", query);
     // Handle the search logic here
   };
-
   const toast = useToast()
   const clickHandler = () =>  toast({
     title: 'Account created.',
@@ -26,6 +26,7 @@ export default function Home() {
     duration: 9000,
     isClosable: true,
   });
+  const user = UseCurrentUser();
   return (
     <>
       <Box p={4}>
@@ -35,6 +36,7 @@ export default function Home() {
         <Button colorScheme="blue" onClick={clickHandler}>
           Click Me
         </Button>
+        <p>{`user ${user?.name} number ${user?.phoneNumber}`}</p>
         {/* <DeleteButton onClick={console.log("...")}/> */}
       </Box>
       {/* <CarsGrid showed_for="user"/> */}

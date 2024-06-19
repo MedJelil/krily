@@ -3,10 +3,14 @@ import { Providers } from "./providers";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import theme from "./theme";
-import { ColorModeScript } from "@chakra-ui/react";
+import { Box, ColorModeScript, Grid, GridItem } from "@chakra-ui/react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { auth } from "@/auth";
+import Sidebar from "./components/Sidebar";
+import SessionProvider from "./SessionProvider";
+import ClientNav from "./components/ClientNav";
+import RentalNav from "./components/RentalNav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,21 +24,52 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const session = await auth();
+  const session = await auth();
   return (
     <html lang="en">
       <body className={inter.className}>
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-
-        <Providers>
-          {  <Navbar />}
-          <main className="min-h-screen">
-            {children}
-          </main>
-          <footer>
+        <SessionProvider session={session}>
+          <Providers>
+            {/* <Grid
+              templateAreas={{
+                base: `"side nav"
+                       "main main"
+                       "footer footer"`,
+                md: `"side nav"
+                     "side main"
+                     "side footer"`,
+              }}
+              gridTemplateRows={"50px 1fr 30px"}
+              gridTemplateColumns={"15% 85%"}
+            > */}
+            {/* <GridItem area={"nav"}> */}
+            {/* <Box pos={"fixed"} zIndex={10}> */}
+            {session?.user.roleId == 1 ? (
+              <Navbar />
+            ) : session?.user.roleId == 2 ? (
+              <ClientNav />
+            ) : session?.user.roleId == 3 ? (
+              <RentalNav />
+            ) : (
+              ""
+            )}
+            {/* </Box> */}
+            {/* </GridItem> */}
+            {/* <GridItem area={"side"} > */}
+            {/* <Box pos={"fixed"} zIndex={10} width={"15%"}>
+                <Sidebar />
+                </Box> */}
+            {/* </GridItem> */}
+            {/* <GridItem area={"main"} className="min-h-screen"> */}
+            <main className="min-h-screen">{children}</main>
+            {/* </GridItem> */}
+            {/* <GridItem area={"footer"}> */}
             <Footer />
-          </footer>
-        </Providers>
+            {/* </GridItem> */}
+            {/* </Grid> */}
+          </Providers>
+        </SessionProvider>
       </body>
     </html>
   );

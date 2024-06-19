@@ -4,6 +4,13 @@ export interface User {
     name: string;
     phoneNumber: string;
     password: string;
+    roleId: number;
+
+  }
+export interface Admin {
+    id: number;
+    roleId: number;
+    user: User;
 
   }
 export interface Client {

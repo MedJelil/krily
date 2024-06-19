@@ -1,6 +1,8 @@
 "use client";
-
+import { PiSignOutBold } from "react-icons/pi";
 import { ReactNode, useEffect, useState } from "react";
+import { LiaSignOutAltSolid } from "react-icons/lia";
+
 import {
   Box,
   Flex,
@@ -18,19 +20,23 @@ import {
   Stack,
   useColorMode,
 } from "@chakra-ui/react";
-import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import {
+  HamburgerIcon,
+  CloseIcon,
+  MoonIcon,
+  SunIcon,
+} from "@chakra-ui/icons";
 import { logout } from "../lib/actions";
 import { UseCurrentUser } from "../hooks/useCurrentUser";
 import { useRouter } from "next/navigation";
-import { Admin } from "../interfaces";
 import axios from "axios";
-import { PiSignOutBold } from "react-icons/pi";
+import { Rental } from "../interfaces";
 
 const Links = [
-  { name: "Dashboard", link: "/admin" },
-  { name: "Users", link: "/admin/users" },
-  { name: "Cars", link: "/admin/cars" },
-  { name: "Requests", link: "/admin/requests" },
+  { name: "Dashboard", link: "/rental" },
+  { name: "Cars", link: "/rental/cars" },
+  { name: "Add car", link: "/rental/cars/new" },
+  { name: "Requests", link: "/rental/requests" },
 ];
 
 const NavLink = ({
@@ -61,13 +67,13 @@ export default function withAction() {
   const currentUser = UseCurrentUser();
   const router = useRouter();
 
-  const [user, setUser] = useState<Admin>();
+  const [user, setUser] = useState<Rental>();
   const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`/apis/admins/${currentUser?.id}`);
+        const response = await axios.get(`/apis/rentals/${currentUser?.id}`);
         setUser(response.data); // Axios wraps the response data in a `data` object
       } catch (err) {
         setError("Something went wrong");
@@ -125,8 +131,8 @@ export default function withAction() {
                 <Avatar
                   size={"sm"}
                   ml={2}
-                  src={
-                    "https://t4.ftcdn.net/jpg/02/27/45/09/360_F_227450952_KQCMShHPOPebUXklULsKsROk5AvN6H1H.jpg"
+                  src={ user?.image_url ||
+                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                   }
                 />
               </MenuButton>
@@ -134,15 +140,15 @@ export default function withAction() {
                 <MenuItem rounded={10} onClick={() => router.push(`/profile`)}>
                   Profile
                 </MenuItem>
-                <MenuItem rounded={10} bgColor={"#00B5D8"}>
-                  Admin acount
-                </MenuItem>
-
+                {user?.status == "VERIFIED" && <MenuItem rounded={10} bgColor={"#00B5D8"}>Acount verified</MenuItem>}
+                {user?.status == "IN_PROGRESS" && <MenuItem rounded={10} bgColor={"#A0AEC0"}>Under verification...</MenuItem>}
+                {user?.status == "BLOCKED" && <MenuItem rounded={10} bgColor={"#E53E3E"}>Acount blocked</MenuItem>}
+                {user?.status == "NOT_VERIFIED" && <MenuItem rounded={10} bgColor={"#F6E05E"}>Verify your acount</MenuItem>}
                 <MenuDivider />
                 <form action={logout}>
                   <MenuItem rounded={10} type="submit">
-                    Logout
-                    <PiSignOutBold />
+                    Logout 
+                  <PiSignOutBold />
                   </MenuItem>
                 </form>
               </MenuList>

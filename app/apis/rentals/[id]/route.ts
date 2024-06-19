@@ -9,13 +9,9 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const rental = await prisma.rental.findUnique({
-    where: { id: Number(params.id) },
+    where: { userId: Number(params.id) },
     include: {
-      user: {
-        include: {
-          role: true,
-        },
-      },
+      user: true,
     },
   });
 

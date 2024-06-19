@@ -6,6 +6,7 @@ import {
   Flex,
   Avatar,
   HStack,
+  Link,
   IconButton,
   Button,
   Menu,
@@ -18,19 +19,24 @@ import {
   Stack,
   useColorMode,
 } from "@chakra-ui/react";
-import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import {
+  HamburgerIcon,
+  CloseIcon,
+  AddIcon,
+  MoonIcon,
+  SunIcon,
+} from "@chakra-ui/icons";
 import { logout } from "../lib/actions";
 import { UseCurrentUser } from "../hooks/useCurrentUser";
 import { useRouter } from "next/navigation";
-import { Admin } from "../interfaces";
 import axios from "axios";
+import { Admin, Client, Rental, User } from "../interfaces";
 import { PiSignOutBold } from "react-icons/pi";
 
 const Links = [
-  { name: "Dashboard", link: "/admin" },
-  { name: "Users", link: "/admin/users" },
-  { name: "Cars", link: "/admin/cars" },
-  { name: "Requests", link: "/admin/requests" },
+  { name: "Cars", link: "/user/cars" },
+  { name: "Requests", link: "/user/requests" },
+  { name: "History", link: "/user/history" },
 ];
 
 const NavLink = ({
@@ -61,13 +67,13 @@ export default function withAction() {
   const currentUser = UseCurrentUser();
   const router = useRouter();
 
-  const [user, setUser] = useState<Admin>();
+  const [user, setUser] = useState<Client>();
   const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`/apis/admins/${currentUser?.id}`);
+        const response = await axios.get(`/apis/clients/${currentUser?.id}`);
         setUser(response.data); // Axios wraps the response data in a `data` object
       } catch (err) {
         setError("Something went wrong");
@@ -126,7 +132,8 @@ export default function withAction() {
                   size={"sm"}
                   ml={2}
                   src={
-                    "https://t4.ftcdn.net/jpg/02/27/45/09/360_F_227450952_KQCMShHPOPebUXklULsKsROk5AvN6H1H.jpg"
+                    user?.image_url ||
+                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                   }
                 />
               </MenuButton>
@@ -134,10 +141,26 @@ export default function withAction() {
                 <MenuItem rounded={10} onClick={() => router.push(`/profile`)}>
                   Profile
                 </MenuItem>
-                <MenuItem rounded={10} bgColor={"#00B5D8"}>
-                  Admin acount
-                </MenuItem>
-
+                {user?.status == "VERIFIED" && (
+                  <MenuItem rounded={10} bgColor={"#00B5D8"}>
+                    Acount verified
+                  </MenuItem>
+                )}
+                {user?.status == "IN_PROGRESS" && (
+                  <MenuItem rounded={10} bgColor={"#A0AEC0"}>
+                    Under verification...
+                  </MenuItem>
+                )}
+                {user?.status == "BLOCKED" && (
+                  <MenuItem rounded={10} bgColor={"#E53E3E"}>
+                    Acount blocked
+                  </MenuItem>
+                )}
+                {user?.status == "NOT_VERIFIED" && (
+                  <MenuItem rounded={10} bgColor={"#F6E05E"}>
+                    Verify your acount
+                  </MenuItem>
+                )}
                 <MenuDivider />
                 <form action={logout}>
                   <MenuItem rounded={10} type="submit">

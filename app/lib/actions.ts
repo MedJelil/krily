@@ -1,5 +1,5 @@
 "use server"
-import { signIn } from '@/auth';
+import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
  
 // ...
@@ -22,3 +22,7 @@ export async function authenticate(
     throw error;
   }
 }
+
+export const logout = async () => {
+  await signOut({redirectTo:"http://localhost:3000/Login"});
+};
