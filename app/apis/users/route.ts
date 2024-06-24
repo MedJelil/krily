@@ -2,20 +2,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import prisma from "@/prisma/client";
+import { userSchema } from "@/app/schemas";
 
-export const userSchema = z.object({
-  name: z
-    .string()
-    .regex(/^[a-zA-Z\s'-]+$/, "Invalid name. Only alphabets allowed."),
-  phoneNumber: z.string().regex(/^[234]\d{7}$/, "Invalid telephone number."),
-  password: z
-    .string()
-    .regex(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-      "Password must be at least 8 characters long and include both letters and numbers."
-    ),
-  roleId: z.number().optional(),
-});
+// export const userSchema = z.object({
+//   name: z
+//     .string()
+//     .regex(/^[a-zA-Z\s'-]+$/, "Invalid name. Only alphabets allowed."),
+//   phoneNumber: z.string().regex(/^[234]\d{7}$/, "Invalid telephone number."),
+//   password: z
+//     .string()
+//     .regex(
+//       /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+//       "Password must be at least 8 characters long and include both letters and numbers."
+//     ),
+//   roleId: z.number().optional(),
+// });
 
 export async function POST(request: NextRequest) {
   const body = await request.json();

@@ -6,7 +6,6 @@ import {
   Flex,
   Avatar,
   HStack,
-  Link,
   IconButton,
   Button,
   Menu,
@@ -30,8 +29,9 @@ import { logout } from "../lib/actions";
 import { UseCurrentUser } from "../hooks/useCurrentUser";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { Admin, Client, Rental, User } from "../interfaces";
+import { Client } from "../interfaces";
 import { PiSignOutBold } from "react-icons/pi";
+import Link from "next/link";
 
 const Links = [
   { name: "Cars", link: "/user/cars" },
@@ -91,15 +91,13 @@ export default function withAction() {
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          {false && (
-            <IconButton
-              size={"md"}
-              icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-              aria-label={"Open Menu"}
-              display={{ md: "none" }}
-              onClick={isOpen ? onClose : onOpen}
-            />
-          )}
+          <IconButton
+            size={"md"}
+            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+            aria-label={"Open Menu"}
+            display={{ md: "none" }}
+            onClick={isOpen ? onClose : onOpen}
+          />
           <HStack spacing={8} alignItems={"center"}>
             <>
               <Box>Logo</Box>
@@ -158,7 +156,9 @@ export default function withAction() {
                 )}
                 {user?.status == "NOT_VERIFIED" && (
                   <MenuItem rounded={10} bgColor={"#F6E05E"}>
-                    Verify your acount
+                    <Link href="/user/acount-verification">
+                      Verify your acount
+                    </Link>
                   </MenuItem>
                 )}
                 <MenuDivider />

@@ -42,7 +42,7 @@ export const authConfig = {
     jwt: async ({ token, user }) => {
       if (user) {
         token.id = user.id;
-        token.id = user.name;
+        token.name = user.name;
         token.phoneNumber = user.phoneNumber;
         token.roleId = user.roleId;
       }

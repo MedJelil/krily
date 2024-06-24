@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { rentalSchema } from "../route";
+import { rentalSchema } from "@/app/schemas";
 
 const prisma = new PrismaClient();
 
@@ -42,7 +42,6 @@ export async function PUT(
     location: body.location || rental?.location,
     status: body.status || rental?.status,
     image_url: body.image_url || rental?.image_url,
-    
   };
 
   const validation = rentalSchema.safeParse(newRental);

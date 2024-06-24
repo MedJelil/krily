@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 import { Reservation } from "@/app/interfaces";
 import AcceptButton from "@/app/components/AcceptButton";
 import RefuseButton from "@/app/components/RefuseButton";
+import Loader from "@/app/components/Loader";
 
 export const RentalDetail = ({ params }: { params: { id: string } }) => {
   const id = +params.id;

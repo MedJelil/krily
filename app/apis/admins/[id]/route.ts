@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { adminSchema } from "../route";
+import { adminSchema } from "@/app/schemas";
 
 const prisma = new PrismaClient();
 
@@ -12,7 +12,7 @@ export async function GET(
     where: { userId: Number(params.id) },
     include: {
       user: true,
-    }
+    },
   });
 
   if (!admin) {

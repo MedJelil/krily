@@ -3,7 +3,7 @@ import CarsGrid from "@/app/components/CarsGrid";
 import SearchBar from "@/app/components/SearchBar";
 import { Stack } from "@chakra-ui/react";
 
-const Cars = async ({
+const Cars = ({
   searchParams,
 }: {
   searchParams?: {

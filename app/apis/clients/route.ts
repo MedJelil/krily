@@ -1,26 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import prisma from "@/prisma/client";
+import { clientSchema } from "@/app/schemas";
 // import bcrypt from "bcryptjs";
 
-
-
-export const clientSchema = z.object({
-  name: z
-    .string()
-    .regex(/^[a-zA-Z\s'-]+$/, "Invalid name. Only alphabets allowed."),
-  phoneNumber: z.string().regex(/^[234]\d{7}$/, "Invalid telephone number."),
-  status: z.enum(['VERIFIED', 'IN_PROGRESS', 'NOT_VERIFIED', 'BLOCKED']).optional(),
-  password: z
-    .string()
-    .regex(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-      "Password must be at least 8 characters long and include both letters and numbers."
-    ),
-  image_url: z.string().optional(),
-  permis: z.string().optional(),
-  identity: z.string().optional(),
-});
+// export const clientSchema = z.object({
+//   name: z
+//     .string()
+//     .regex(/^[a-zA-Z\s'-]+$/, "Invalid name. Only alphabets allowed."),
+//   phoneNumber: z.string().regex(/^[234]\d{7}$/, "Invalid telephone number."),
+//   status: z.enum(['VERIFIED', 'IN_PROGRESS', 'NOT_VERIFIED', 'BLOCKED']).optional(),
+//   password: z
+//     .string()
+//     .regex(
+//       /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+//       "Password must be at least 8 characters long and include both letters and numbers."
+//     ),
+//   image_url: z.string().optional(),
+//   permis: z.string().optional(),
+//   identity: z.string().optional(),
+// });
 
 // POST request handler
 export async function POST(request: NextRequest) {

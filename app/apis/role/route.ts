@@ -1,11 +1,12 @@
 // pages/api/roles/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-import prisma from '@/prisma/client';
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import prisma from "@/prisma/client";
+import { roleSchema } from "@/app/schemas";
 
-export const roleSchema = z.object({
-  name: z.string().min(1, 'Role name cannot be empty'),
-});
+// export const roleSchema = z.object({
+//   name: z.string().min(1, 'Role name cannot be empty'),
+// });
 
 export async function POST(request: NextRequest) {
   const body = await request.json();

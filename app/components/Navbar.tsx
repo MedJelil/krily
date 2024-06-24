@@ -85,15 +85,13 @@ export default function withAction() {
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          {false && (
-            <IconButton
-              size={"md"}
-              icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-              aria-label={"Open Menu"}
-              display={{ md: "none" }}
-              onClick={isOpen ? onClose : onOpen}
-            />
-          )}
+          <IconButton
+            size={"md"}
+            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+            aria-label={"Open Menu"}
+            display={{ md: "none" }}
+            onClick={isOpen ? onClose : onOpen}
+          />
           <HStack spacing={8} alignItems={"center"}>
             <>
               <Box>Logo</Box>

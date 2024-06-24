@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { clientSchema } from "../route";
+import { clientSchema } from "@/app/schemas";
 
 const prisma = new PrismaClient();
 
@@ -18,7 +18,7 @@ export async function GET(
     where: { userId: Number(params.id) },
     include: {
       user: true,
-    }
+    },
   });
 
   if (!client) {
@@ -48,7 +48,7 @@ export async function PUT(
     image_url: body.image_url || client?.image_url || "",
     permis: body.permis || client?.permis || "",
     identity: body.identity || client?.identity || "",
-    status: body.status || client?.status
+    status: body.status || client?.status,
   };
 
   const validation = clientSchema.safeParse(newClient);

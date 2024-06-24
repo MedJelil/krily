@@ -20,9 +20,9 @@ import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { UseCurrentUser } from "../hooks/useCurrentUser";
 
 const reservedCarSchema = z.object({
-
   days: z
     .number()
     .int()
@@ -38,14 +38,14 @@ interface Props {
   carId: number;
 }
 
-
 const RentalPopup = ({ carId }: Props) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const initialRef = useRef(null);
   const finalRef = useRef(null);
   const toast = useToast();
   const router = useRouter();
+  const user = UseCurrentUser();
 
   const formatDateTime = (dateTime: string): string => {
     const date = new Date(dateTime);
@@ -67,35 +67,36 @@ const RentalPopup = ({ carId }: Props) => {
   });
 
   const onSubmit = async (data: FieldValues) => {
-    try {
-      const result = await axios.post("/apis/rentedCars", {
-        ...data,
-        clientId: 2,
-        carId: carId,
-      });
-      if (result) {
+    if (user)
+      try {
+        const result = await axios.post("/apis/rentedCars", {
+          ...data,
+          clientId: +user.id,
+          carId: carId,
+        });
+        if (result) {
+          const showToast = () =>
+            toast({
+              title: "request sent",
+              description: "your reservation has been reserved please wait ",
+              status: "success",
+              duration: 9000,
+              isClosable: true,
+            });
+          router.push("/user/requests");
+          showToast();
+        }
+      } catch (error) {
         const showToast = () =>
           toast({
-            title: "request sent",
-            description: "your reservation has been reserved please wait ",
-            status: "success",
+            title: "error loading",
+            description: "something went wrong",
+            status: "error",
             duration: 9000,
             isClosable: true,
           });
-        router.push("/user/requests");
         showToast();
       }
-    } catch (error) {
-      const showToast = () =>
-        toast({
-          title: "error loading",
-          description: "something went wrong",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-      showToast();
-    }
     // console.log({
     //   ...data,
     //   rental_date: formatDateTime(data.rental_date),
@@ -104,6 +105,7 @@ const RentalPopup = ({ carId }: Props) => {
     //   carId: carId,
     // });
   };
+
   return (
     <>
       <Button onClick={onOpen}>rent</Button>
@@ -143,7 +145,7 @@ const RentalPopup = ({ carId }: Props) => {
         </ModalContent>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default RentalPopup
+export default RentalPopup;

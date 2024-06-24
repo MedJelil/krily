@@ -1,5 +1,4 @@
 "use client";
-import ReservationRequests from "@/app/components/ReservationRequests";
 import styles from "../../components/RadioInputs.module.css";
 import {
   Box,
@@ -7,7 +6,6 @@ import {
   CardBody,
   CardHeader,
   Heading,
-  Text,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import UserRentalRequests from "@/app/components/UserRentalRequests";

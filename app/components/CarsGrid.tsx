@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Car } from "../interfaces";
 import prisma from "@/prisma/client";
+import { UseCurrentUser } from "../hooks/useCurrentUser";
 
 interface props {
   showed_for: string;
@@ -12,15 +13,19 @@ interface props {
   currentPage: number;
 }
 
-const CarsGrid = ({query, currentPage, showed_for}: props) => {
-
+const CarsGrid = ({ query, currentPage, showed_for }: props) => {
   const [cars, setCars] = useState<Car[]>();
   const [error, setError] = useState(null);
+  const currentUser = UseCurrentUser();
 
   useEffect(() => {
     const fetchCars = async () => {
+      const endPoint =
+        showed_for == "rental"
+          ? `cars/carByRental/${currentUser?.id}?query=${query}`
+          : `cars?query=${query}`;
       try {
-        const response = await axios.get(`/apis/cars?query=${query}`); // Modify the URL as needed
+        const response = await axios.get(`/apis/${endPoint}`); // Modify the URL as needed
         setCars(response.data); // Axios wraps the response data in a `data` object
       } catch (err) {
         // setError(err.message);
@@ -30,7 +35,6 @@ const CarsGrid = ({query, currentPage, showed_for}: props) => {
     fetchCars();
   }, [query]);
 
-
   if (cars)
     return (
       <>
@@ -38,10 +42,10 @@ const CarsGrid = ({query, currentPage, showed_for}: props) => {
         <SimpleGrid
           spacing={4}
           columns={{ sm: 1, md: 2, lg: 4, xl: 5 }}
-          padding={{base: 2, md: 5}}
+          padding={{ base: 2, md: 5 }}
         >
           {cars.map((car) => (
-            <CarCard key={car.id} car={car} showed_for={showed_for}/>
+            <CarCard key={car.id} car={car} showed_for={showed_for} />
           ))}
         </SimpleGrid>
       </>

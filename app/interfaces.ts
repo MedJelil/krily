@@ -20,8 +20,8 @@ export interface Client {
   image_url: string;
   permis: string;
   identity: string;
-  createdAt: string; // ISO 8601 date string
-  updatedAt: string; // ISO 8601 date string
+  createdAt: string | Date; // ISO 8601 date string
+  updatedAt: string | Date; // ISO 8601 date string
 
   }
 
@@ -31,8 +31,8 @@ export interface Client {
     status: string; 
     location: string;
     image_url: string;
-    createdAt: string; // ISO 8601 date string
-    updatedAt: string; // ISO 8601 date string
+    createdAt: string | Date; // ISO 8601 date string
+    updatedAt: string | Date; // ISO 8601 date string
   }
   
   export interface Car {
@@ -50,8 +50,8 @@ export interface Client {
     year: number;
     daily_price: number;
     rentalId: number;
-    createdAt: string; // ISO 8601 date string
-    updatedAt: string; // ISO 8601 date string
+    createdAt: string | Date; // ISO 8601 date string
+    updatedAt: string | Date; // ISO 8601 date string
     rental: Rental;
   }
 
@@ -61,11 +61,12 @@ export interface Client {
     id: number;
     days: number;
     status: string;
-    userId: number;
+    clientId: number;
     carId: number;
-    createdAt: string; // ISO 8601 date string
-    updatedAt: string; // ISO 8601 date string
+    createdAt: string | Date; // ISO 8601 date string
+    updatedAt: string | Date; // ISO 8601 date string
     client: Client;
+    rental: Rental;
     car: Car;
   }
 
@@ -75,11 +76,12 @@ export interface Client {
     end_reservation_date: string; // ISO 8601 date string
     days: number;
     status: string;
-    userId: number;
+    clientId: number;
     carId: number;
-    createdAt: string; // ISO 8601 date string
-    updatedAt: string; // ISO 8601 date string
-    client: Client;    
+    createdAt: string | Date; // ISO 8601 date string
+    updatedAt: string | Date; // ISO 8601 date string
+    client: Client; 
+    rental: Rental;   
     car: Car;
   }
 
@@ -99,7 +101,7 @@ export interface Client {
     year: number;
     daily_price: number;
     rentalId: number;
-    createdAt: string; // ISO 8601 date string
-    updatedAt: string; // ISO 8601 date string
+    createdAt: string | Date; // ISO 8601 date string
+    updatedAt: string | Date; // ISO 8601 date string
     rental: Rental;
 }

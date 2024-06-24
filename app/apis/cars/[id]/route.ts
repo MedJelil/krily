@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { carSchema } from "../route";
+import { carSchema } from "@/app/schemas";
+// import { carSchema } from "../route";
 
 const prisma = new PrismaClient();
 
@@ -8,8 +9,6 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-
-
   const car = await prisma.car.findUnique({
     where: { id: Number(params.id) },
   });

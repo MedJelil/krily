@@ -20,6 +20,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { UseCurrentUser } from "../hooks/useCurrentUser";
 
 const reservedCarSchema = z.object({
   rental_date: z.string().min(1, "you must enter the reservation date"),
@@ -45,6 +46,7 @@ const PopupForm = ({ carId }: Props) => {
   const finalRef = useRef(null);
   const toast = useToast();
   const router = useRouter();
+  const user = UseCurrentUser();
 
   const formatDateTime = (dateTime: string): string => {
     const date = new Date(dateTime);
@@ -66,37 +68,41 @@ const PopupForm = ({ carId }: Props) => {
   });
 
   const onSubmit = async (data: FieldValues) => {
-    try {
-      const result = await axios.post("/apis/reservedCars", {
-        ...data,
-        rental_date: formatDateTime(data.rental_date),
-        end_reservation_date: end_reservation_date(data.rental_date, data.days),
-        clientId: 2,
-        carId: carId,
-      });
-      if (result) {
+    if (user)
+      try {
+        const result = await axios.post("/apis/reservedCars", {
+          ...data,
+          rental_date: formatDateTime(data.rental_date),
+          end_reservation_date: end_reservation_date(
+            data.rental_date,
+            data.days
+          ),
+          clientId: +user.id,
+          carId: carId,
+        });
+        if (result) {
+          const showToast = () =>
+            toast({
+              title: "car reserved",
+              description: "your reservation has been reserved",
+              status: "success",
+              duration: 9000,
+              isClosable: true,
+            });
+          router.push("/user/requests");
+          showToast();
+        }
+      } catch (error) {
         const showToast = () =>
           toast({
-            title: "car reserved",
-            description: "your reservation has been reserved",
-            status: "success",
+            title: "error loading",
+            description: "something went wrong",
+            status: "error",
             duration: 9000,
             isClosable: true,
           });
-        router.push("/user/requests");
         showToast();
       }
-    } catch (error) {
-      const showToast = () =>
-        toast({
-          title: "error loading",
-          description: "something went wrong",
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
-      showToast();
-    }
     // console.log({
     //   ...data,
     //   rental_date: formatDateTime(data.rental_date),

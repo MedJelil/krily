@@ -1,14 +1,14 @@
+import { NextRequest, NextResponse } from "next/server";
+import z from "zod";
+import prisma from "@/prisma/client";
+import { rentedCarSchema } from "@/app/schemas";
 
-import { NextRequest, NextResponse } from 'next/server';
-import z from 'zod';
-import prisma from '@/prisma/client';
-
-export const rentedCarSchema = z.object({
-    days: z.number().int().min(1, "Days must be at least 1, indicating the car is rented for at least one day."),
-    clientId: z.number().int().positive("User ID must be a positive integer representing a valid user."),
-    carId: z.number().int().positive("Car ID must be a positive integer representing a valid user."),
-    status: z.string().optional()
-  });
+// export const rentedCarSchema = z.object({
+//     days: z.number().int().min(1, "Days must be at least 1, indicating the car is rented for at least one day."),
+//     clientId: z.number().int().positive("User ID must be a positive integer representing a valid user."),
+//     carId: z.number().int().positive("Car ID must be a positive integer representing a valid user."),
+//     status: z.string().optional()
+//   });
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
@@ -23,7 +23,6 @@ export async function POST(request: NextRequest) {
       days: body.days,
       clientId: body.clientId,
       carId: body.carId,
-      
     },
   });
 
@@ -33,9 +32,11 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   const rentedCars = await prisma.rentedCar.findMany({
     include: {
-      client: {include: {
-        user: true
-      }},
+      client: {
+        include: {
+          user: true,
+        },
+      },
       car: {
         include: {
           rental: {
@@ -49,4 +50,3 @@ export async function GET() {
   });
   return NextResponse.json(rentedCars, { status: 200 });
 }
-

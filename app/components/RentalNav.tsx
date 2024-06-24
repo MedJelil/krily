@@ -20,12 +20,7 @@ import {
   Stack,
   useColorMode,
 } from "@chakra-ui/react";
-import {
-  HamburgerIcon,
-  CloseIcon,
-  MoonIcon,
-  SunIcon,
-} from "@chakra-ui/icons";
+import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { logout } from "../lib/actions";
 import { UseCurrentUser } from "../hooks/useCurrentUser";
 import { useRouter } from "next/navigation";
@@ -91,15 +86,15 @@ export default function withAction() {
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          {false && (
-            <IconButton
-              size={"md"}
-              icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-              aria-label={"Open Menu"}
-              display={{ md: "none" }}
-              onClick={isOpen ? onClose : onOpen}
-            />
-          )}
+          {/* {false && ( */}
+          <IconButton
+            size={"md"}
+            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+            aria-label={"Open Menu"}
+            display={{ md: "none" }}
+            onClick={isOpen ? onClose : onOpen}
+          />
+          {/* // )} */}
           <HStack spacing={8} alignItems={"center"}>
             <>
               <Box>Logo</Box>
@@ -131,7 +126,8 @@ export default function withAction() {
                 <Avatar
                   size={"sm"}
                   ml={2}
-                  src={ user?.image_url ||
+                  src={
+                    user?.image_url ||
                     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                   }
                 />
@@ -140,15 +136,31 @@ export default function withAction() {
                 <MenuItem rounded={10} onClick={() => router.push(`/profile`)}>
                   Profile
                 </MenuItem>
-                {user?.status == "VERIFIED" && <MenuItem rounded={10} bgColor={"#00B5D8"}>Acount verified</MenuItem>}
-                {user?.status == "IN_PROGRESS" && <MenuItem rounded={10} bgColor={"#A0AEC0"}>Under verification...</MenuItem>}
-                {user?.status == "BLOCKED" && <MenuItem rounded={10} bgColor={"#E53E3E"}>Acount blocked</MenuItem>}
-                {user?.status == "NOT_VERIFIED" && <MenuItem rounded={10} bgColor={"#F6E05E"}>Verify your acount</MenuItem>}
+                {user?.status == "VERIFIED" && (
+                  <MenuItem rounded={10} bgColor={"#00B5D8"}>
+                    Acount verified
+                  </MenuItem>
+                )}
+                {user?.status == "IN_PROGRESS" && (
+                  <MenuItem rounded={10} bgColor={"#A0AEC0"}>
+                    Under verification...
+                  </MenuItem>
+                )}
+                {user?.status == "BLOCKED" && (
+                  <MenuItem rounded={10} bgColor={"#E53E3E"}>
+                    Acount blocked
+                  </MenuItem>
+                )}
+                {user?.status == "NOT_VERIFIED" && (
+                  <MenuItem rounded={10} bgColor={"#F6E05E"}>
+                    Verify your acount
+                  </MenuItem>
+                )}
                 <MenuDivider />
                 <form action={logout}>
                   <MenuItem rounded={10} type="submit">
-                    Logout 
-                  <PiSignOutBold />
+                    Logout
+                    <PiSignOutBold />
                   </MenuItem>
                 </form>
               </MenuList>

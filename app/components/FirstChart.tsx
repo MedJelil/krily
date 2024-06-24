@@ -1,66 +1,116 @@
-"use client"
-import { Box } from "@chakra-ui/react";
-import React from "react";
+"use client";
+import { Bar, Line, Pie } from "react-chartjs-2";
 import {
-  ResponsiveContainer,
-  ComposedChart,
-  Line,
-  Area,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  BarElement,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
   Tooltip,
   Legend
-} from "recharts";
+);
 
-const data = [
-  {
-    name: "Page A",
-    uv: 590,
-    pv: 800,
-    amt: 1400
-  },
-  {
-    name: "Page B",
-    uv: 868,
-    pv: 967,
-    amt: 1506
-  },
-  {
-    name: "Page C",
-    uv: 1397,
-    pv: 1098,
-    amt: 989
-  },
-
-];
-
-export default function App() {
-  return (
-    <Box w={"100%"} h={{base: "300px", md: "500px"}} p={0}>
-      <ResponsiveContainer>
-        <ComposedChart
-          width={500}
-          height={400}
-          data={data}
-          margin={{
-            top: 20,
-            right: 20,
-            bottom: 20,
-            left: 20
-          }}
-        >
-          <CartesianGrid stroke="#f5f5f5" />
-          <XAxis dataKey="name" scale="band" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Area type="monotone" dataKey="amt" fill="#8884d8" stroke="#8884d8" />
-          <Bar dataKey="pv" barSize={20} fill="#413ea0" />
-          <Line type="monotone" dataKey="uv" stroke="#ff7300" />
-        </ComposedChart>
-      </ResponsiveContainer>
-    </Box>
-  );
+interface LineChartProps {
+  data: { x: string; y: number }[];
+  title: string;
 }
+
+export const LineChart: React.FC<LineChartProps> = ({ data,title }) => {
+  const chartData = {
+    labels: data.map((item) => item.x),
+    datasets: [
+      {
+        label:title,
+        data: data.map((item) => item.y),
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+      },
+    ],
+  };
+
+  return <Line data={chartData} />;
+};
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+interface PieChartProps {
+  data: { id: string; value: number }[];
+  title: string;
+
+}
+
+export const PieChart: React.FC<PieChartProps> = ({ data ,title}) => {
+  const chartData = {
+    labels: data.map((item) => item.id),
+    datasets: [
+      {
+        label: title,
+        data: data.map((item) => item.value),
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 206, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  return <Pie data={chartData} />;
+};
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+interface BarChartProps {
+  data: { name: string; count: number }[];
+  title: string;
+
+}
+
+export const BarChart: React.FC<BarChartProps> = ({ data ,title}) => {
+  const chartData = {
+    labels: data.map((item) => item.name),
+    datasets: [
+      {
+        label: title,
+        data: data.map((item) => item.count),
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  return <Bar data={chartData} />;
+};

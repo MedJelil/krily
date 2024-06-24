@@ -22,6 +22,7 @@ import {
 import { useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 import { useRouter } from "next/navigation";
+import { UseCurrentUser } from "../hooks/useCurrentUser";
 
 const carSchema = z.object({
   model: z.string().min(1, "Model name is required."),
@@ -95,50 +96,56 @@ const CarForm = ({ carData }: props) => {
   const router = useRouter();
   const [isSubmiting, setSubmiting] = useState(false);
   const toast = useToast();
+  const user = UseCurrentUser();
 
   const onSubmit = async (data: FieldValues) => {
     if (carData) {
       // console.log(carData);
-      try {
-        setSubmiting(true);
-        const result = await axios.put(`/apis/cars/${carData.id}`, {
-          ...data,
-          rentalId: 1,
-        });
-        if (result) {
-          const showToast = () =>
-            toast({
-              title: "Car updated succesfuly.",
-              description: "We've update your car for you.",
-              status: "success",
-              duration: 9000,
-              isClosable: true,
-            });
-          router.push(`/rental/cars/details/${carData.id}`);
-          showToast();
+      if (user)
+        try {
+          setSubmiting(true);
+          const result = await axios.put(`/apis/cars/${carData.id}`, {
+            ...data,
+            rentalId: +user.id,
+          });
+          if (result) {
+            const showToast = () =>
+              toast({
+                title: "Car updated succesfuly.",
+                description: "We've update your car for you.",
+                status: "success",
+                duration: 9000,
+                isClosable: true,
+              });
+            router.push(`/rental/cars/details/${carData.id}`);
+            showToast();
+          }
+        } catch (error) {
+          setSubmiting(false);
         }
-      } catch (error) {
-        setSubmiting(false);
-      }
     } else {
-      try {
-        setSubmiting(true);
-        const result = await axios.post("/apis/cars", { ...data, rentalId: 1 });
-        if (result) {
-          const showToast = () =>
-            toast({
-              title: "Car created succesfuly.",
-              description: "We've created your car for you.",
-              status: "success",
-              duration: 9000,
-              isClosable: true,
-            });
-          router.push("/rental/cars");
-          showToast();
+      if (user)
+        try {
+          setSubmiting(true);
+          const result = await axios.post("/apis/cars", {
+            ...data,
+            rentalId: +user.id,
+          });
+          if (result) {
+            const showToast = () =>
+              toast({
+                title: "Car created succesfuly.",
+                description: "We've created your car for you.",
+                status: "success",
+                duration: 9000,
+                isClosable: true,
+              });
+            router.push("/rental/cars");
+            showToast();
+          }
+        } catch (error) {
+          setSubmiting(false);
         }
-      } catch (error) {
-        setSubmiting(false);
-      }
     }
   };
 
@@ -308,7 +315,7 @@ const CarForm = ({ carData }: props) => {
                     alt="Main mage"
                     objectFit="cover"
                     w={"250px"}
-                    h={"150px"} 
+                    h={"150px"}
                     borderRadius={5}
                   />
                 </Box>
@@ -356,7 +363,7 @@ const CarForm = ({ carData }: props) => {
                     alt="Image 1"
                     objectFit="cover"
                     w={"250px"}
-                    h={"150px"} 
+                    h={"150px"}
                     borderRadius={5}
                   />
                 </Box>

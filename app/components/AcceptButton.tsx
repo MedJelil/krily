@@ -1,5 +1,6 @@
 import { Button, Spinner, useToast } from "@chakra-ui/react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface Props {
@@ -11,6 +12,7 @@ const AcceptButton = ({ id, used_for }: Props) => {
   const toast = useToast();
   const [renting, setRenting] = useState(false);
   const [reserving, setReserving] = useState(false);
+  const router = useRouter();
 
   const handleReservation = async (id: number) => {
     try {
@@ -29,6 +31,7 @@ const AcceptButton = ({ id, used_for }: Props) => {
           });
         showToast();
         setReserving(false);
+        router.push("/rental/requests");
       }
     } catch (error) {
       const showToast = () =>
@@ -60,6 +63,7 @@ const AcceptButton = ({ id, used_for }: Props) => {
           });
         showToast();
         setRenting(false);
+        router.push("/rental/requests");
       }
     } catch (error) {}
   };

@@ -1,9 +1,19 @@
-import React from 'react'
+import React from "react";
+import Services from "../components/Services";
+import Charts from "../components/Charts";
+import { auth } from "@/auth";
 
-const page = () => {
-  return (
-    <div>admin page</div>
-  )
-}
+const page = async () => {
+  const session = await auth();
+  const userId = session?.user.id;
 
-export default page
+  if (userId)
+    return (
+      <div className="flex flex-col gap-9 ">
+        <Services use_for="admin" />
+        <Charts use_for="admin" userId={+userId} />
+      </div>
+    );
+};
+
+export default page;
