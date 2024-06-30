@@ -1,0 +1,13 @@
+/* CountDownTimer.module.css */
+.countdownContainer {
+  display: flex;
+  justify-content: space-around;
+  width: 300px;
+  align-items: center;
+  height: auto;
+}
+
+.rotate {
+  transform: rotateX(360deg);
+  transition: transform 0.25s;
+}

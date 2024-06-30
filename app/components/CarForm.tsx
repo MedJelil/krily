@@ -23,6 +23,7 @@ import { useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 import { useRouter } from "next/navigation";
 import { UseCurrentUser } from "../hooks/useCurrentUser";
+import { Rental } from "../interfaces";
 
 const carSchema = z.object({
   model: z.string().min(1, "Model name is required."),
@@ -67,8 +68,9 @@ interface props {
     daily_price: number;
     rentalId: number;
   };
+  rentalId?: number;
 }
-const CarForm = ({ carData }: props) => {
+const CarForm = ({ carData, rentalId }: props) => {
   const {
     register,
     handleSubmit,
@@ -96,56 +98,52 @@ const CarForm = ({ carData }: props) => {
   const router = useRouter();
   const [isSubmiting, setSubmiting] = useState(false);
   const toast = useToast();
-  const user = UseCurrentUser();
 
   const onSubmit = async (data: FieldValues) => {
     if (carData) {
       // console.log(carData);
-      if (user)
-        try {
-          setSubmiting(true);
-          const result = await axios.put(`/apis/cars/${carData.id}`, {
-            ...data,
-            rentalId: +user.id,
-          });
-          if (result) {
-            const showToast = () =>
-              toast({
-                title: "Car updated succesfuly.",
-                description: "We've update your car for you.",
-                status: "success",
-                duration: 9000,
-                isClosable: true,
-              });
-            router.push(`/rental/cars/details/${carData.id}`);
-            showToast();
-          }
-        } catch (error) {
-          setSubmiting(false);
+      try {
+        setSubmiting(true);
+        const result = await axios.put(`/apis/cars/${carData.id}`, {
+          ...data,
+        });
+        if (result) {
+          const showToast = () =>
+            toast({
+              title: "Car updated succesfuly.",
+              description: "We've update your car for you.",
+              status: "success",
+              duration: 9000,
+              isClosable: true,
+            });
+          router.push(`/rental/cars/details/${carData.id}`);
+          showToast();
         }
-    } else {
-      if (user)
-        try {
-          setSubmiting(true);
-          const result = await axios.post("/apis/cars", {
-            ...data,
-            rentalId: +user.id,
-          });
-          if (result) {
-            const showToast = () =>
-              toast({
-                title: "Car created succesfuly.",
-                description: "We've created your car for you.",
-                status: "success",
-                duration: 9000,
-                isClosable: true,
-              });
-            router.push("/rental/cars");
-            showToast();
-          }
-        } catch (error) {
-          setSubmiting(false);
+      } catch (error) {
+        setSubmiting(false);
+      }
+    } else if (rentalId) {
+      try {
+        setSubmiting(true);
+        const result = await axios.post("/apis/cars", {
+          ...data,
+          rentalId: rentalId,
+        });
+        if (result) {
+          const showToast = () =>
+            toast({
+              title: "Car created succesfuly.",
+              description: "We've created your car for you.",
+              status: "success",
+              duration: 9000,
+              isClosable: true,
+            });
+          router.push("/rental/cars");
+          showToast();
         }
+      } catch (error) {
+        setSubmiting(false);
+      }
     }
   };
 

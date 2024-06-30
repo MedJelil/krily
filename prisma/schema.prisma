@@ -47,6 +47,8 @@ model Client {
   updatedAt    DateTime      @updatedAt
   rentedCars   RentedCar[] // One-to-many relationship
   reservedCars ReservedCar[] // One-to-many relationship
+  history      History[]
+  current      Current[]
   userId       Int           @unique
   user         User          @relation(fields: [userId], references: [id])
 }
@@ -83,6 +85,8 @@ model Car {
   updatedAt      DateTime      @updatedAt
   rentedCars     RentedCar[]
   reservedCars   ReservedCar[]
+  history        History[]
+  current        Current[]
 }
 
 model RentedCar {
@@ -109,6 +113,30 @@ model ReservedCar {
   car                  Car      @relation(fields: [carId], references: [id])
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
+}
+
+model History {
+  id          Int      @id @default(autoincrement())
+  rental_date DateTime
+  days        Int
+  clientId    Int
+  carId       Int
+  client      Client   @relation(fields: [clientId], references: [id])
+  car         Car      @relation(fields: [carId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Current {
+  id          Int      @id @default(autoincrement())
+  rental_date DateTime
+  days        Int
+  clientId    Int
+  carId       Int
+  client      Client   @relation(fields: [clientId], references: [id])
+  car         Car      @relation(fields: [carId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 enum Status {

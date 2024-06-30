@@ -131,7 +131,14 @@ const ReservationDetails = ({ params }: { params: { id: string } }) => {
                 </Table>
                 {reservation.status == "IN_PROGRESS" && (
                   <HStack mt={4} justifyContent={"center"}>
-                    <AcceptButton id={reservation.id} used_for="reservation" />
+                    <AcceptButton
+                      id={reservation.id}
+                      used_for="reservation"
+                      clientId={reservation.clientId}
+                      carId={reservation.car.id}
+                      days={reservation.days}
+                      rental_date={reservation.rental_date}
+                    />
                     <RefuseButton
                       id={reservation.id}
                       used_for={"reservation"}

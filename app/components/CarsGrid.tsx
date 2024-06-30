@@ -44,9 +44,17 @@ const CarsGrid = ({ query, currentPage, showed_for }: props) => {
           columns={{ sm: 1, md: 2, lg: 4, xl: 5 }}
           padding={{ base: 2, md: 5 }}
         >
-          {cars.map((car) => (
-            <CarCard key={car.id} car={car} showed_for={showed_for} />
-          ))}
+          {showed_for != "user" &&
+            cars.map((car) => (
+              <CarCard key={car.id} car={car} showed_for={showed_for} />
+            ))}
+
+          {showed_for == "user" &&
+            cars.map((car) =>
+              car.status == "VERIFIED" ? (
+                <CarCard key={car.id} car={car} showed_for={showed_for} />
+              ) : null
+            )}
         </SimpleGrid>
       </>
     );

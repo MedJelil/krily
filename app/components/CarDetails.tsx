@@ -18,24 +18,29 @@ import AdminActions from "./AdminActions";
 interface Props {
   car: CarData;
   showed_for: string;
+  clientId?: number;
 }
 
-const CarDetails = ({ car, showed_for }: Props) => {
+const CarDetails = ({ car, showed_for, clientId }: Props) => {
   return (
     <Container maxW="container.lg" mt={10}>
       <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4}>
-        <HStack justifyContent={"space-between"} alignItems={"center"}> 
+        <HStack justifyContent={"space-between"} alignItems={"center"}>
           <Heading mb={4} alignItems={"center"}>
             <span className="capitalize">{car.model} </span>
           </Heading>
-          {showed_for == "rental" && <HStack alignItems={"center"}>
-            <EditButton link={`/rental/cars/edit/${car.id}`} />
-            <DeleteButton id={car.id} />
-          </HStack>}
-          {showed_for == "user" && <HStack alignItems={"center"}>
-            <PopupForm carId={car.id} />
-            <RentalPopup carId={car.id} />
-          </HStack>}
+          {showed_for == "rental" && (
+            <HStack alignItems={"center"}>
+              <EditButton link={`/rental/cars/edit/${car.id}`} />
+              <DeleteButton id={car.id} />
+            </HStack>
+          )}
+          {showed_for == "user" && clientId && (
+            <HStack alignItems={"center"}>
+              <PopupForm carId={car.id} clientId={clientId} />
+              <RentalPopup carId={car.id} clientId={clientId} />
+            </HStack>
+          )}
           {showed_for == "admin" && <AdminActions id={car.id} />}
         </HStack>
         <Box
@@ -65,25 +70,27 @@ const CarDetails = ({ car, showed_for }: Props) => {
           </HStack>
           <HStack justifyContent={"space-between"} gap={2}>
             <Text>Silenders: {car.silenders}</Text>
-           {showed_for == "rental" && <Box>
-              Status:{" "}
-              <Text
-                display={"inline"}
-                bg={
-                  car.status == "BLOCKED"
-                    ? "red"
-                    : car.status == "IN_PROGRESS"
-                    ? "yellowgreen"
-                    : car.status == "NOT_VERIFIED"
-                    ? "gray"
-                    : "blue"
-                }
-                borderRadius="lg"
-                p={1}
-              >
-                {car.status}
-              </Text>
-            </Box>}
+            {showed_for == "rental" && (
+              <Box>
+                Status:{" "}
+                <Text
+                  display={"inline"}
+                  bg={
+                    car.status == "BLOCKED"
+                      ? "red"
+                      : car.status == "IN_PROGRESS"
+                      ? "yellowgreen"
+                      : car.status == "NOT_VERIFIED"
+                      ? "gray"
+                      : "blue"
+                  }
+                  borderRadius="lg"
+                  p={1}
+                >
+                  {car.status}
+                </Text>
+              </Box>
+            )}
           </HStack>
           <SimpleGrid columns={2} spacing={4}>
             {car.image1_url && (

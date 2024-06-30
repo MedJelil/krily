@@ -6,9 +6,20 @@ import React, { useState } from "react";
 interface Props {
   id: number;
   used_for: string;
+  clientId: number;
+  carId: number;
+  rental_date: string;
+  days: number;
 }
 
-const AcceptButton = ({ id, used_for }: Props) => {
+const AcceptButton = ({
+  id,
+  used_for,
+  clientId,
+  carId,
+  rental_date,
+  days,
+}: Props) => {
   const toast = useToast();
   const [renting, setRenting] = useState(false);
   const [reserving, setReserving] = useState(false);
@@ -20,7 +31,19 @@ const AcceptButton = ({ id, used_for }: Props) => {
       const result = await axios.put(`/apis/reservedCars/${id}`, {
         status: "VERIFIED",
       });
-      if (result) {
+      const currentAding = await axios.post(`/apis/current`, {
+        carId: carId,
+        clientId: clientId,
+        days: days,
+        rental_date: rental_date,
+      });
+      const historyAding = await axios.post(`/apis/history`, {
+        carId: carId,
+        clientId: clientId,
+        days: days,
+        rental_date: rental_date,
+      });
+      if (result && historyAding && currentAding) {
         const showToast = () =>
           toast({
             title: "Accepted succesfuly.",
@@ -52,7 +75,19 @@ const AcceptButton = ({ id, used_for }: Props) => {
       const result = await axios.put(`/apis/rentedCars/${id}`, {
         status: "VERIFIED",
       });
-      if (result) {
+      const historyAding = await axios.post(`/apis/history`, {
+        carId: carId,
+        clientId: clientId,
+        days: days,
+        rental_date: rental_date,
+      });
+      const currentAding = await axios.post(`/apis/current`, {
+        carId: carId,
+        clientId: clientId,
+        days: days,
+        rental_date: rental_date,
+      });
+      if (result && historyAding && currentAding) {
         const showToast = () =>
           toast({
             title: "Accepted succesfuly.",

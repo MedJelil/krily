@@ -37,6 +37,7 @@ const Links = [
   { name: "Cars", link: "/user/cars" },
   { name: "Requests", link: "/user/requests" },
   { name: "History", link: "/user/history" },
+  { name: "Current", link: "/user/current" },
 ];
 
 const NavLink = ({

@@ -19,14 +19,14 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Reservation } from "@/app/interfaces";
+import { RentedCar } from "@/app/interfaces";
 import AcceptButton from "@/app/components/AcceptButton";
 import RefuseButton from "@/app/components/RefuseButton";
 import Loader from "@/app/components/Loader";
 
 const RentalDetail = ({ params }: { params: { id: string } }) => {
   const id = +params.id;
-  const [rental, setRental] = useState<Reservation | null>(null);
+  const [rental, setRental] = useState<RentedCar | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -124,7 +124,14 @@ const RentalDetail = ({ params }: { params: { id: string } }) => {
                 </Table>
                 {rental.status == "IN_PROGRESS" && (
                   <HStack mt={4} justifyContent={"center"}>
-                    <AcceptButton id={rental.id} used_for="rental" />
+                    <AcceptButton
+                      id={rental.id}
+                      used_for="rental"
+                      clientId={rental.clientId}
+                      carId={rental.car.id}
+                      days={rental.days}
+                      rental_date={rental.updatedAt.toString()}
+                    />
                     <RefuseButton id={rental.id} used_for={"rental"} />
                   </HStack>
                 )}

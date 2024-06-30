@@ -36,9 +36,10 @@ type ReservationData = z.infer<typeof reservedCarSchema>;
 
 interface Props {
   carId: number;
+  clientId: number;
 }
 
-const RentalPopup = ({ carId }: Props) => {
+const RentalPopup = ({ carId, clientId }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const initialRef = useRef(null);
@@ -67,36 +68,36 @@ const RentalPopup = ({ carId }: Props) => {
   });
 
   const onSubmit = async (data: FieldValues) => {
-    if (user)
-      try {
-        const result = await axios.post("/apis/rentedCars", {
-          ...data,
-          clientId: +user.id,
-          carId: carId,
-        });
-        if (result) {
-          const showToast = () =>
-            toast({
-              title: "request sent",
-              description: "your reservation has been reserved please wait ",
-              status: "success",
-              duration: 9000,
-              isClosable: true,
-            });
-          router.push("/user/requests");
-          showToast();
-        }
-      } catch (error) {
+    // if (user)
+    try {
+      const result = await axios.post("/apis/rentedCars", {
+        ...data,
+        clientId: clientId,
+        carId: carId,
+      });
+      if (result) {
         const showToast = () =>
           toast({
-            title: "error loading",
-            description: "something went wrong",
-            status: "error",
+            title: "request sent",
+            description: "your reservation has been reserved please wait ",
+            status: "success",
             duration: 9000,
             isClosable: true,
           });
+        router.push("/user/requests");
         showToast();
       }
+    } catch (error) {
+      const showToast = () =>
+        toast({
+          title: "error loading",
+          description: "something went wrong",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      showToast();
+    }
     // console.log({
     //   ...data,
     //   rental_date: formatDateTime(data.rental_date),

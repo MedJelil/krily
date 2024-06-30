@@ -11,6 +11,7 @@ import {
   Td,
   HStack,
   Th,
+  Button,
   Alert,
   AlertIcon,
   Card,
@@ -18,36 +19,34 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Reservation } from "@/app/interfaces";
-import AcceptButton from "@/app/components/AcceptButton";
-import RefuseButton from "@/app/components/RefuseButton";
+import { HistoryInterface } from "@/app/interfaces";
 import Loader from "@/app/components/Loader";
 
-export const RentalDetail = ({ params }: { params: { id: string } }) => {
+const HistoryDetails = ({ params }: { params: { id: string } }) => {
   const id = +params.id;
-  const [rental, setRental] = useState<Reservation | null>(null);
+  const [history, setHistory] = useState<HistoryInterface | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchRental = async () => {
+    const fetchHistory = async () => {
       try {
-        const response = await axios.get(`/apis/rentedCars/${id}`);
-        setRental(response.data);
+        const response = await axios.get(`/apis/history/${id}`);
+        setHistory(response.data);
       } catch (err) {
-        setError("Failed to fetch rental details.");
+        setError("Failed to fetch History details.");
       }
     };
 
-    fetchRental();
+    fetchHistory();
   }, []);
 
   if (error) {
     return <Text>{error}</Text>;
   }
 
-  if (!rental && !error) return <Loader />;
+  if (!history && !error) return <Loader />;
 
-  if (rental)
+  if (history)
     return (
       <Box
         p={4}
@@ -67,10 +66,10 @@ export const RentalDetail = ({ params }: { params: { id: string } }) => {
               <Image
                 borderRadius="full"
                 boxSize="100px"
-                src={rental.client.image_url || "https://bit.ly/dan-abramov"}
-                alt={rental.client.user.name}
+                src={history.client.image_url || "https://bit.ly/dan-abramov"}
+                alt={history.client.user.name}
               />
-              <Heading>{rental.client.user.name}</Heading>
+              <Heading>{history.client.user.name}</Heading>
             </Stack>
             <Stack
               direction={{ base: "column", md: "row" }}
@@ -83,62 +82,44 @@ export const RentalDetail = ({ params }: { params: { id: string } }) => {
                   borderRadius="md"
                   boxSize={{ sm: "sm", lg: "sm" }}
                   h={{ sm: "sm", lg: "300px" }}
-                  src={rental.car.main_image_url}
-                  alt={rental.car.brand}
+                  src={history.car.main_image_url}
+                  alt={history.car.brand}
                 />
               </Box>
-              <Box mt={4} w={{ sm: "w-full", lg: "300px" }}>
+              <Box mt={4}>
                 <Heading size="md">Rental Details</Heading>
                 <Table variant="simple" size="sm">
                   <Tbody>
                     <Tr>
                       <Th>Rental Date</Th>
-                      <Td>{new Date(rental.createdAt).toLocaleDateString()}</Td>
+                      <Td>
+                        {new Date(history.createdAt).toLocaleDateString()}
+                      </Td>
                     </Tr>
                     <Tr>
                       <Th>Rental Time </Th>
-                      <Td>{new Date(rental.createdAt).toLocaleTimeString()}</Td>
+                      <Td>
+                        {new Date(history.createdAt).toLocaleTimeString()}
+                      </Td>
                     </Tr>
                     <Tr>
                       <Th>Days</Th>
-                      <Td>{rental.days}</Td>
+                      <Td>{history.days}</Td>
                     </Tr>
                     <Tr>
                       <Th>Model</Th>
-                      <Td>{rental.car.model}</Td>
+                      <Td>{history.car.model}</Td>
                     </Tr>
                     <Tr>
                       <Th>Brand</Th>
-                      <Td>{rental.car.brand}</Td>
+                      <Td>{history.car.brand}</Td>
                     </Tr>
                     <Tr>
                       <Th>Year</Th>
-                      <Td>{rental.car.year}</Td>
-                    </Tr>
-                    <Tr>
-                      <Th>Status</Th>
-                      <Td>{rental.status}</Td>
+                      <Td>{history.car.year}</Td>
                     </Tr>
                   </Tbody>
                 </Table>
-                {rental.status == "IN_PROGRESS" && (
-                  <HStack mt={4} justifyContent={"center"}>
-                    <AcceptButton id={rental.id} used_for="rental" />
-                    <RefuseButton id={rental.id} used_for={"rental"} />
-                  </HStack>
-                )}
-                {rental.status == "NOT_VERIFIED" && (
-                  <Alert status="error">
-                    <AlertIcon />
-                    Request refused
-                  </Alert>
-                )}
-                {rental.status == "VERIFIED" && (
-                  <Alert status="success">
-                    <AlertIcon />
-                    Requesr Accepted
-                  </Alert>
-                )}
               </Box>
             </Stack>
           </CardBody>
@@ -146,3 +127,5 @@ export const RentalDetail = ({ params }: { params: { id: string } }) => {
       </Box>
     );
 };
+
+export default HistoryDetails;

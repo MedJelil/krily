@@ -1,5 +1,5 @@
 // pages/cars.tsx
-"use client"
+"use client";
 // import { GetServerSideProps } from 'next';
 
 import CarsGrid from "@/app/components/CarsGrid";
@@ -28,11 +28,7 @@ const Cars = ({
         </div>
         <Stack direction={"column"}>
           <SearchBar onSearch={handleSearch} />
-          <CarsGrid
-            showed_for="user"
-            query={query}
-            currentPage={currentPage}
-          />
+          <CarsGrid showed_for="user" query={query} currentPage={currentPage} />
         </Stack>
         {/*  <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
 <Table query={query} currentPage={currentPage} />

@@ -7,7 +7,7 @@ const page = async () => {
   if (session)
     return (
       <div>
-        <History use_for="client" userId={parseInt(session.user.id)} />
+        <History use_for="rental" userId={parseInt(session.user.id)} />
       </div>
     );
 };

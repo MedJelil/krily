@@ -43,7 +43,9 @@ export default async function RootLayout({
             </nav>
 
             <main className="min-h-screen mt-1">
-              <Box pt={{ base: "15%", md: "6%" }}>{children}</Box>
+              <Box pt={session ? { base: "15%", md: "6%" } : "0"}>
+                {children}
+              </Box>
             </main>
             <footer>
               <Footer />

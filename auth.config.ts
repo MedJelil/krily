@@ -13,6 +13,11 @@ export const authConfig = {
 
       // console.log(`User role: ${auth?.user}`);
 
+      // Allow access to the Signup route for non-logged-in users
+      if (pathname === "/Signup") {
+        return true;
+      }
+
       // Redirect based on roleId
       if (isLoggedIn) {
         if (pathname === "/Login" || pathname === "/") {

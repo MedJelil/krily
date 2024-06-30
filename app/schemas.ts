@@ -138,3 +138,46 @@ export const userSchema = z.object({
     ),
   roleId: z.number().optional(),
 });
+
+export const historySchema = z.object({
+  rental_date: z.string().min(1, "you must enter the reservation date"),
+
+  days: z
+    .number()
+    .int()
+    .min(
+      1,
+      "Days must be at least 1, indicating the car is rented for at least one day."
+    ),
+  clientId: z
+    .number()
+    .int()
+    .positive(
+      "Client ID must be a positive integer representing a valid client."
+    ),
+  carId: z
+    .number()
+    .int()
+    .positive("Car ID must be a positive integer representing a valid car."),
+});
+export const currentSchema = z.object({
+  rental_date: z.string().min(1, "you must enter the reservation date"),
+
+  days: z
+    .number()
+    .int()
+    .min(
+      1,
+      "Days must be at least 1, indicating the car is rented for at least one day."
+    ),
+  clientId: z
+    .number()
+    .int()
+    .positive(
+      "Client ID must be a positive integer representing a valid client."
+    ),
+  carId: z
+    .number()
+    .int()
+    .positive("Car ID must be a positive integer representing a valid car."),
+});

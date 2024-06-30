@@ -14,7 +14,7 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  Link,
+  // Link,
   Radio,
   RadioGroup,
   useToast,
@@ -26,6 +26,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const clientSchema = z.object({
   name: z
@@ -60,18 +61,16 @@ const Signup = () => {
   const toast = useToast();
   const router = useRouter();
 
-
   const schema = userType === "client" ? clientSchema : rentalSchema;
 
   type RentalFormData = z.infer<typeof rentalSchema>;
   type ClientFormData = z.infer<typeof clientSchema>;
 
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RentalFormData >({
+  } = useForm<RentalFormData>({
     resolver: zodResolver(schema),
   });
 
@@ -95,7 +94,7 @@ const Signup = () => {
       console.error("Error registering user:", error);
       const showToast = () =>
         toast({
-          title: "failed to create user account", 
+          title: "failed to create user account",
           description: "Something went wrong while creating user account",
           status: "error",
           duration: 9000,
@@ -112,7 +111,13 @@ const Signup = () => {
       justify={"center"}
       bg={useColorModeValue("gray.50", "gray.800")}
     >
-      <Stack spacing={8} mx={"auto"} w={{ base: "sm", md: "lg" }} py={12} px={6}>
+      <Stack
+        spacing={8}
+        mx={"auto"}
+        w={{ base: "sm", md: "lg" }}
+        py={12}
+        px={6}
+      >
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"}>
             Sign up
@@ -150,13 +155,17 @@ const Signup = () => {
                 <FormControl id="name" isRequired>
                   <FormLabel>First Name</FormLabel>
                   <Input type="text" {...register("name")} />
-                  {errors.name && <Text color="red.500">{errors.name.message}</Text>}
+                  {errors.name && (
+                    <Text color="red.500">{errors.name.message}</Text>
+                  )}
                 </FormControl>
               </Box>
               <FormControl id="phoneNumber" isRequired>
                 <FormLabel>Phone Number</FormLabel>
                 <Input type="text" {...register("phoneNumber")} />
-                {errors.phoneNumber && <Text color="red.500">{errors.phoneNumber.message}</Text>}
+                {errors.phoneNumber && (
+                  <Text color="red.500">{errors.phoneNumber.message}</Text>
+                )}
               </FormControl>
               <FormControl id="password" isRequired>
                 <FormLabel>Password</FormLabel>
@@ -176,13 +185,17 @@ const Signup = () => {
                     </Button>
                   </InputRightElement>
                 </InputGroup>
-                {errors.password && <Text color="red.500">{errors.password.message}</Text>}
+                {errors.password && (
+                  <Text color="red.500">{errors.password.message}</Text>
+                )}
               </FormControl>
               {userType === "rental" && (
                 <FormControl id="location" isRequired>
                   <FormLabel>Location</FormLabel>
                   <Input type="text" {...register("location")} />
-                  {errors.location && <Text color="red.500">{errors.location.message}</Text>}
+                  {errors.location && (
+                    <Text color="red.500">{errors.location.message}</Text>
+                  )}
                 </FormControl>
               )}
               <Stack spacing={10} pt={2}>
@@ -201,7 +214,10 @@ const Signup = () => {
               </Stack>
               <Stack pt={6}>
                 <Text align={"center"}>
-                  Already a user? <Link color={"blue.400"}>Login</Link>
+                  Already a user?{" "}
+                  <Link href={"/Login"} color="blue">
+                    Login
+                  </Link>
                 </Text>
               </Stack>
             </Stack>

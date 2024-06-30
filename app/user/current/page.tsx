@@ -1,4 +1,4 @@
-import History from "@/app/components/History";
+import Current from "@/app/components/Current";
 import { auth } from "@/auth";
 import React from "react";
 
@@ -7,7 +7,7 @@ const page = async () => {
   if (session)
     return (
       <div>
-        <History use_for="client" userId={parseInt(session.user.id)} />
+        <Current use_for="client" userId={parseInt(session.user.id)} />
       </div>
     );
 };

@@ -14,11 +14,12 @@ import {
   Skeleton,
   Stack,
   Alert,
+  AlertDescription,
   AlertIcon,
   AlertTitle,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { HistoryInterface } from "../interfaces";
+import { CurrentInterface } from "../interfaces";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { UseCurrentUser } from "../hooks/useCurrentUser";
@@ -28,29 +29,29 @@ interface Props {
   use_for: string;
 }
 
-const History = ({ use_for, userId }: Props) => {
-  const [history, setHistory] = useState<HistoryInterface[]>([]);
+const Current = ({ use_for, userId }: Props) => {
+  const [current, setCurrent] = useState<CurrentInterface[]>([]);
   const [error, setError] = useState("");
   const router = useRouter();
   const user = UseCurrentUser();
 
   const handleClick = (id: number) => {
-    router.push(`/${use_for == "rental" ? "rental" : "user"}/history/${id}`);
+    router.push(`/${use_for == "rental" ? "rental" : "user"}/current/${id}`);
   };
 
   const compare = (start_date: string, days: number): boolean => {
     const end = new Date(start_date);
     end.setDate(end.getDate() + days);
     const now = new Date();
-    if (now > end) return true;
+    if (now < end) return true;
     return false;
   };
 
   useEffect(() => {
     const fetchRentals = async () => {
       try {
-        const result = await axios.get(`/apis/history`);
-        setHistory(result.data);
+        const result = await axios.get(`/apis/current`);
+        setCurrent(result.data);
       } catch (err) {
         setError("Something went wrong");
       }
@@ -62,11 +63,11 @@ const History = ({ use_for, userId }: Props) => {
     return <p>{error}</p>;
   }
 
-  let filterHistory = history.filter((histo) =>
-    compare(histo.rental_date.toString(), histo.days)
+  let filterCurrent = current.filter((curr) =>
+    compare(curr.rental_date.toString(), curr.days)
   );
 
-  if (!filterHistory.length)
+  if (!filterCurrent.length)
     return (
       <>
         <Alert
@@ -80,7 +81,7 @@ const History = ({ use_for, userId }: Props) => {
         >
           <AlertIcon boxSize="40px" mr={0} />
           <AlertTitle mt={4} mb={1} fontSize="lg">
-            No History Found!
+            No Current Car Found!
           </AlertTitle>
         </Alert>
       </>
@@ -103,11 +104,11 @@ const History = ({ use_for, userId }: Props) => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {history.map((histo) =>
-                    compare(histo.rental_date.toString(), histo.days) ? (
+                  {current.map((curr) =>
+                    compare(curr.rental_date.toString(), curr.days) ? (
                       <Tr
-                        key={histo.id}
-                        onClick={() => handleClick(histo.id)}
+                        key={curr.id}
+                        onClick={() => handleClick(curr.id)}
                         _hover={{
                           textDecoration: "none",
                           bg: "gray.500",
@@ -122,28 +123,28 @@ const History = ({ use_for, userId }: Props) => {
                               boxSize="50px"
                               src={
                                 use_for == "rental"
-                                  ? histo.client.image_url
-                                  : histo.client.image_url ||
+                                  ? curr.client.image_url
+                                  : curr.client.image_url ||
                                     "https://bit.ly/dan-abramov"
                               }
-                              alt={histo.client.user.name}
+                              alt={curr.client.user.name}
                             />
-                            <Text>{histo.client.user.name}</Text>
+                            <Text>{curr.client.user.name}</Text>
                           </Box>
                         </Td>
                         <Td>
-                          {histo.car.brand} {histo.car.model}
-                          {histo.car.year}
+                          {curr.car.brand} {curr.car.model}
+                          {curr.car.year}
                         </Td>
                         <Hide below="md">
                           <Td>
                             <p>
-                              {new Date(histo.rental_date).toLocaleDateString()}
+                              {new Date(curr.rental_date).toLocaleDateString()}
                             </p>
-                            {new Date(histo.rental_date).toLocaleTimeString()}
+                            {new Date(curr.rental_date).toLocaleTimeString()}
                           </Td>
                         </Hide>
-                        <Td>{histo.days}</Td>
+                        <Td>{curr.days}</Td>
                       </Tr>
                     ) : null
                   )}
@@ -156,4 +157,4 @@ const History = ({ use_for, userId }: Props) => {
     );
 };
 
-export default History;
+export default Current;

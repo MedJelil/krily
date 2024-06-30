@@ -32,6 +32,8 @@ const Links = [
   { name: "Cars", link: "/rental/cars" },
   { name: "Add car", link: "/rental/cars/new" },
   { name: "Requests", link: "/rental/requests" },
+  { name: "Hitory", link: "/rental/history" },
+  { name: "Current", link: "/rental/current" },
 ];
 
 const NavLink = ({
