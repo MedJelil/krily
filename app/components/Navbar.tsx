@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation";
 import { Admin } from "../interfaces";
 import axios from "axios";
 import { PiSignOutBold } from "react-icons/pi";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 const Links = [
   { name: "Dashboard", link: "/admin" },
@@ -135,6 +136,14 @@ export default function withAction() {
                 <MenuItem rounded={10} bgColor={"#00B5D8"}>
                   Admin acount
                 </MenuItem>
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                  width={"100%"}
+                >
+                  <LocaleSwitcher />
+                </Box>
 
                 <MenuDivider />
                 <form action={logout}>

@@ -26,6 +26,7 @@ import { UseCurrentUser } from "../hooks/useCurrentUser";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Rental } from "../interfaces";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 const Links = [
   { name: "Dashboard", link: "/rental" },
@@ -158,6 +159,14 @@ export default function withAction() {
                     Verify your acount
                   </MenuItem>
                 )}
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                  width={"100%"}
+                >
+                  <LocaleSwitcher />
+                </Box>
                 <MenuDivider />
                 <form action={logout}>
                   <MenuItem rounded={10} type="submit">

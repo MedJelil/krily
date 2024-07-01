@@ -1,0 +1,10 @@
+{
+  "Index": {
+    "title": "Hello world!"
+  },
+  "LocaleSwitcher": {
+    "fr": "french",
+    "en": "English",
+    "label": "Language"
+  }
+}

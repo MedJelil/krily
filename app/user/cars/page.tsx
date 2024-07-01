@@ -5,6 +5,7 @@
 import CarsGrid from "@/app/components/CarsGrid";
 import SearchBar from "@/app/components/SearchBar";
 import { Stack } from "@chakra-ui/react";
+import { useTranslations } from "next-intl";
 
 const Cars = ({
   searchParams,
@@ -20,9 +21,11 @@ const Cars = ({
     console.log("Search query:", query);
     // Handle the search logic here
   };
+  const t = useTranslations("Index");
   return (
     <>
       <div className="w-full">
+        <h1>{t("title")}</h1>
         <div className="flex w-full items-center justify-between">
           {/* <h1 className={`${lusitana.className} text-2xl`}>Invoices</h1> */}
         </div>

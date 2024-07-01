@@ -1,0 +1,10 @@
+{
+  "Index": {
+    "title": "salut vie!"
+  },
+  "LocaleSwitcher": {
+    "fr": "french",
+    "en": "English",
+    "label": "Language"
+  }
+}

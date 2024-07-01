@@ -11,6 +11,10 @@ import SessionProvider from "./SessionProvider";
 import ClientNav from "./components/ClientNav";
 import RentalNav from "./components/RentalNav";
 
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
+import LocaleSwitcher from "./components/LocaleSwitcher";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -24,32 +28,40 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
+  const locale = await getLocale();
+
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages();
+
   return (
     <html lang="en">
       <body className={inter.className}>
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <SessionProvider session={session}>
           <Providers>
-            <nav className="fixed w-full z-10 mt-0">
-              {session?.user.roleId == 1 ? (
-                <Navbar />
-              ) : session?.user.roleId == 2 ? (
-                <ClientNav />
-              ) : session?.user.roleId == 3 ? (
-                <RentalNav />
-              ) : (
-                ""
-              )}
-            </nav>
+            <NextIntlClientProvider messages={messages}>
+              <nav className="fixed w-full z-10 mt-0">
+                {session?.user.roleId == 1 ? (
+                  <Navbar />
+                ) : session?.user.roleId == 2 ? (
+                  <ClientNav />
+                ) : session?.user.roleId == 3 ? (
+                  <RentalNav />
+                ) : (
+                  ""
+                )}
+              </nav>
 
-            <main className="min-h-screen mt-1">
-              <Box pt={session ? { base: "15%", md: "6%" } : "0"}>
-                {children}
-              </Box>
-            </main>
-            <footer>
-              <Footer />
-            </footer>
+              <main className="min-h-screen mt-1">
+                <Box pt={session ? { base: "15%", md: "6%" } : "0"}>
+                  {children}
+                </Box>
+              </main>
+              <footer>
+                <Footer />
+              </footer>
+            </NextIntlClientProvider>
           </Providers>
         </SessionProvider>
       </body>

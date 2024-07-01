@@ -32,6 +32,7 @@ import axios from "axios";
 import { Client } from "../interfaces";
 import { PiSignOutBold } from "react-icons/pi";
 import Link from "next/link";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 const Links = [
   { name: "Cars", link: "/user/cars" },
@@ -162,6 +163,14 @@ export default function withAction() {
                     </Link>
                   </MenuItem>
                 )}
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                  width={"100%"}
+                >
+                  <LocaleSwitcher />
+                </Box>
                 <MenuDivider />
                 <form action={logout}>
                   <MenuItem rounded={10} type="submit">
