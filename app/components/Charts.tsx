@@ -3,6 +3,7 @@ import { Stat, useColorModeValue } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BarChart } from "./FirstChart";
+import { useTranslations } from "next-intl";
 
 interface Props {
   use_for: string;
@@ -38,6 +39,7 @@ const Charts = ({ use_for, userId }: Props) => {
   // if (loading) {
   //   return <div>Loading...</div>;
   // }
+  const t = useTranslations("Index");
 
   return (
     <div className="grid gap-8 md:grid-cols-2 grid-cols-1 md:mx-16 mx-2 ">
@@ -50,7 +52,7 @@ const Charts = ({ use_for, userId }: Props) => {
           borderColor={useColorModeValue("gray.100", "gray.500")}
           rounded={"lg"}
         >
-          <h1 className="text-xl text-center mb-6">Top rented cars</h1>
+          <h1 className="text-xl text-center mb-6">{t("Top rented cars")}</h1>
           <BarChart data={data} title="Top cars" />
         </Stat>
       </div>
@@ -63,7 +65,7 @@ const Charts = ({ use_for, userId }: Props) => {
           borderColor={useColorModeValue("gray.100", "gray.500")}
           rounded={"lg"}
         >
-          <h1 className="text-xl text-center mb-6">Top reserved cars</h1>
+          <h1 className="text-xl text-center mb-6">{t("Top reserved cars")}</h1>
           <BarChart data={reservedData} title="Top cars" />
         </Stat>
       </div>

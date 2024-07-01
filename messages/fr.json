@@ -1,10 +1,19 @@
 {
   "Index": {
-    "title": "salut vie!"
+    "title": "choisir une langue",
+    "Cars": "Voitures",
+    "Requests": "Demandes",
+    "Add car": "Ajouter une voiture",
+    "Users": "Utilisateurs",
+    "Dashboard": "Dashboard",
+    "Hitory": "Historique",
+    "Current": "Actuel",
+    "Top reserved cars": "Voitures les plus réservées",
+    "Top rented cars": "Voitures les plus louées"
   },
   "LocaleSwitcher": {
-    "fr": "french",
-    "en": "English",
-    "label": "Language"
+    "fr": "français",
+    "en": "Anglais",
+    "label": "Langue"
   }
 }

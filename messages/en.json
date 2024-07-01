@@ -1,6 +1,15 @@
 {
   "Index": {
-    "title": "Hello world!"
+    "title": "choose a Language",
+    "Cars": "Cars",
+    "Requests": "Requests",
+    "Add car": "Add Car",
+    "Users": "Users",
+    "Dashboard": "Dashboard",
+    "Hitory": "Hitory",
+    "Current": "Current",
+    "Top reserved cars": "Top reserved cars",
+    "Top rented cars": "Top rented cars"
   },
   "LocaleSwitcher": {
     "fr": "french",

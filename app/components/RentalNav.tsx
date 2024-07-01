@@ -27,15 +27,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Rental } from "../interfaces";
 import LocaleSwitcher from "./LocaleSwitcher";
-
-const Links = [
-  { name: "Dashboard", link: "/rental" },
-  { name: "Cars", link: "/rental/cars" },
-  { name: "Add car", link: "/rental/cars/new" },
-  { name: "Requests", link: "/rental/requests" },
-  { name: "Hitory", link: "/rental/history" },
-  { name: "Current", link: "/rental/current" },
-];
+import { useTranslations } from "next-intl";
 
 const NavLink = ({
   children,
@@ -64,6 +56,16 @@ export default function withAction() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentUser = UseCurrentUser();
   const router = useRouter();
+  const t = useTranslations("Index");
+
+  const Links = [
+    { name: t("Dashboard"), link: "/rental" },
+    { name: t("Cars"), link: "/rental/cars" },
+    { name: t("Add car"), link: "/rental/cars/new" },
+    { name: t("Requests"), link: "/rental/requests" },
+    { name: t("Hitory"), link: "/rental/history" },
+    { name: t("Current"), link: "/rental/current" },
+  ];
 
   const [user, setUser] = useState<Rental>();
   const [error, setError] = useState("");

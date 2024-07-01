@@ -13,6 +13,7 @@ import {
 import { useTransition } from "react";
 import { Locale } from "@/config";
 import { setUserLocale } from "@/services/locale";
+import { useTranslations } from "next-intl";
 
 type Props = {
   defaultValue: string;
@@ -33,6 +34,7 @@ export default function LocaleSwitcherSelect({
       setUserLocale(locale);
     });
   }
+  const t = useTranslations("Index");
 
   return (
     <div className=" my-1 ">
@@ -41,11 +43,10 @@ export default function LocaleSwitcherSelect({
           as={Button}
           rightIcon={<Icon as={FaGlobe} w={6} h={6} />}
           isDisabled={isPending}
-          minW="100%"
-          mx={"0"}
+          rounded={10}
           aria-label={label}
         >
-          {isPending ? <Spinner size="sm" /> : "Select Language"}
+          {isPending ? <Spinner size="sm" /> : t("title")}
         </MenuButton>
         <MenuList>
           {items.map((item) => (

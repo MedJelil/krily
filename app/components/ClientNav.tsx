@@ -33,13 +33,7 @@ import { Client } from "../interfaces";
 import { PiSignOutBold } from "react-icons/pi";
 import Link from "next/link";
 import LocaleSwitcher from "./LocaleSwitcher";
-
-const Links = [
-  { name: "Cars", link: "/user/cars" },
-  { name: "Requests", link: "/user/requests" },
-  { name: "History", link: "/user/history" },
-  { name: "Current", link: "/user/current" },
-];
+import { useTranslations } from "next-intl";
 
 const NavLink = ({
   children,
@@ -68,6 +62,14 @@ export default function withAction() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentUser = UseCurrentUser();
   const router = useRouter();
+  const t = useTranslations("Index");
+
+  const Links = [
+    { name: t("Cars"), link: "/user/cars" },
+    { name: t("Requests"), link: "/user/requests" },
+    { name: t("History"), link: "/user/history" },
+    { name: t("Current"), link: "/user/current" },
+  ];
 
   const [user, setUser] = useState<Client>();
   const [error, setError] = useState("");

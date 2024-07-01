@@ -15,6 +15,7 @@ import { FaCar } from "react-icons/fa";
 import { CgAdd } from "react-icons/cg";
 import { BiGitPullRequest } from "react-icons/bi";
 import { ImUsers } from "react-icons/im";
+import { useTranslations } from "next-intl";
 
 interface StatsCardProps {
   title: string;
@@ -63,23 +64,23 @@ function StatsCard(props: StatsCardProps) {
 }
 
 export default function BasicStatistics({ use_for }: { use_for: string }) {
-  // const user = UseCurrentUser();
+  const t = useTranslations("Index");
 
   const { colorMode, toggleColorMode } = useColorMode();
   const color = colorMode === "dark" ? "blue.500" : "red.500";
   const adminLinks = [
     {
-      title: "Cars",
+      title: t("Cars"),
       link: "/admin/cars",
       icon: <FaCar size={"3em"} className="text-red-500" />,
     },
     {
-      title: "Requests",
+      title: t("Requests"),
       link: "/admin/requests",
       icon: <BiGitPullRequest size={"3em"} className="text-blue-500 " />,
     },
     {
-      title: "Users",
+      title: t("Users"),
       link: "/admin/users",
       icon: <ImUsers size={"3em"} className=" text-green-500" />,
     },
@@ -87,17 +88,17 @@ export default function BasicStatistics({ use_for }: { use_for: string }) {
 
   const rentalLinks = [
     {
-      title: "Cars",
+      title: t("Cars"),
       link: "/rental/cars",
       icon: <FaCar size={"3em"} className="text-red-500" />,
     },
     {
-      title: "Requests",
+      title: t("Requests"),
       link: "/rental/requests",
       icon: <BiGitPullRequest size={"3em"} className="text-blue-500 " />,
     },
     {
-      title: "Add car",
+      title: t("Add car"),
       link: "/rental/cars/new",
       icon: <CgAdd size={"3em"} className=" text-green-500" />,
     },
@@ -110,7 +111,7 @@ export default function BasicStatistics({ use_for }: { use_for: string }) {
           {(use_for == "rental" ? rentalLinks : adminLinks).map((link) => (
             <StatsCard
               title={link.title}
-              stat={"5,000"}
+              stat={""}
               icon={link.icon}
               link={link.link}
             />

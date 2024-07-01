@@ -25,7 +25,6 @@ const Cars = ({
   return (
     <>
       <div className="w-full">
-        <h1>{t("title")}</h1>
         <div className="flex w-full items-center justify-between">
           {/* <h1 className={`${lusitana.className} text-2xl`}>Invoices</h1> */}
         </div>

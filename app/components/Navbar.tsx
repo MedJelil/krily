@@ -26,13 +26,7 @@ import { Admin } from "../interfaces";
 import axios from "axios";
 import { PiSignOutBold } from "react-icons/pi";
 import LocaleSwitcher from "./LocaleSwitcher";
-
-const Links = [
-  { name: "Dashboard", link: "/admin" },
-  { name: "Users", link: "/admin/users" },
-  { name: "Cars", link: "/admin/cars" },
-  { name: "Requests", link: "/admin/requests" },
-];
+import { useTranslations } from "next-intl";
 
 const NavLink = ({
   children,
@@ -61,6 +55,14 @@ export default function withAction() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentUser = UseCurrentUser();
   const router = useRouter();
+  const t = useTranslations("Index");
+
+  const Links = [
+    { name: t("Dashboard"), link: "/admin" },
+    { name: t("Users"), link: "/admin/users" },
+    { name: t("Cars"), link: "/admin/cars" },
+    { name: t("Requests"), link: "/admin/requests" },
+  ];
 
   const [user, setUser] = useState<Admin>();
   const [error, setError] = useState("");
