@@ -59,9 +59,9 @@ const page = () => {
               <Heading size="md"> Users</Heading>
             </CardHeader>
             <CardBody p={{ base: 0, md: 4 }}>
-              {clients && <Clients />}
+              {clients && <Clients use_for="users" />}
 
-              {rentals && <Rentals />}
+              {rentals && <Rentals use_for="users" />}
             </CardBody>
           </Card>
         </div>

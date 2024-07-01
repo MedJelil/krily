@@ -85,7 +85,10 @@ const RentalRequests = () => {
                   <Image
                     borderRadius="full"
                     boxSize="50px"
-                    src={rental.client.image_url || "https://bit.ly/dan-abramov"}
+                    src={
+                      rental.client.image_url ||
+                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                    }
                     alt={rental.client.user.name}
                   />
                   <Text>{rental.client.user.name}</Text>

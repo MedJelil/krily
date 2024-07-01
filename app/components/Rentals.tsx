@@ -11,13 +11,20 @@ import {
   Skeleton,
   Stack,
   Button,
+  Alert,
+  AlertIcon,
+  AlertTitle,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Rental } from "../interfaces";
 import { useRouter } from "next/navigation";
 
-const Rentals = () => {
+interface Props {
+  use_for: string;
+}
+
+const Rentals = ({ use_for }: Props) => {
   const [rentals, setRentals] = useState<Rental[]>([]);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -43,35 +50,46 @@ const Rentals = () => {
     return <p>{error}</p>;
   }
 
-  if (!rentals.length) {
+  let filteredRentals = rentals.filter(
+    (rental) => rental.status == "IN_PROGRESS"
+  );
+
+  // setClients(filteredRentals);
+  if (!filteredRentals.length && use_for == "requests")
     return (
       <>
-        <Stack>
-          <Skeleton height="30px" />
-          <Skeleton height="30px" />
-          <Skeleton height="30px" />
-          <Skeleton height="30px" />
-          <Skeleton height="30px" />
-        </Stack>
+        <Alert
+          status="info"
+          variant="subtle"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+          height="200px"
+        >
+          <AlertIcon boxSize="40px" mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize="lg">
+            No Requests Found!
+          </AlertTitle>
+        </Alert>
       </>
     );
-  }
 
   return (
     <Box overflowX="auto">
       <Table variant="simple">
         <Thead>
           <Tr>
-            <Th>client</Th>
+            <Th>rental</Th>
             <Th>Contact</Th>
             <Th>status</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {rentals.map((rental) => (
+          {(use_for != "requests" ? rentals : filteredRentals).map((rental) => (
             <Tr
               key={rental.id}
-              onClick={() => handleClick(rental.id)}
+              onClick={() => handleClick(rental.user.id)}
               borderRadius="md"
               _hover={{
                 textDecoration: "none",
@@ -85,19 +103,17 @@ const Rentals = () => {
                   <Image
                     borderRadius="full"
                     boxSize="40px"
-                    src={rental.image_url || "https://bit.ly/dan-abramov"}
+                    src={
+                      rental.image_url ||
+                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                    }
                     alt={rental.user.name}
                   />
                   <Text>{rental.user.name}</Text>
                 </Box>
               </Td>
-              <Td fontSize={13}>
-                {rental.user.phoneNumber}
-              </Td>
-              <Td fontSize={13}>
-                {rental.status}
-                
-                </Td>
+              <Td fontSize={13}>{rental.user.phoneNumber}</Td>
+              <Td fontSize={13}>{rental.status}</Td>
             </Tr>
           ))}
         </Tbody>
