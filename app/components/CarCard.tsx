@@ -12,12 +12,14 @@ import { CarData } from "../rental/cars/edit/[id]/page";
 import { TbAutomaticGearbox, TbManualGearbox } from "react-icons/tb";
 import Link from "next/link";
 import { Car } from "../interfaces";
+import { useTranslations } from "next-intl";
 
 interface Props {
   car: Car;
   showed_for: string;
 }
 const carCard = ({ car, showed_for }: Props) => {
+  const t = useTranslations("Index");
   return (
     <Link href={`/${showed_for}/cars/details/${car.id}`}>
       <Card maxW="sm" maxH="sm" overflow={"hidden"}>
@@ -27,14 +29,18 @@ const carCard = ({ car, showed_for }: Props) => {
           h="230px"
         />
         <CardBody px={1}>
-          <Heading size="md" mb={1} >
-            <span className="capitalize">{car.model} </span>{car.year}
-          </Heading>
+          <HStack justifyContent={"space-between"}>
+            <Heading size="md" mb={1}>
+              <span className="capitalize">{car.model} </span>
+              {car.year}
+            </Heading>
+            <Text>{showed_for == "user" && car.rental.user.name}</Text>
+          </HStack>
           <HStack justifyContent={"space-between"} mb={1}>
             <HStack>
-              <Text>{showed_for == "user" && "Boit Vitess"}</Text>
+              <Text>{showed_for == "user" && t("Boit Vitess")}</Text>
               {showed_for != "user" ? (
-                <Text 
+                <Text
                   bg={
                     car.status == "BLOCKED"
                       ? "#E53E3E"
@@ -55,7 +61,11 @@ const carCard = ({ car, showed_for }: Props) => {
                 <TbManualGearbox />
               )}
             </HStack>
-            {showed_for != "admin" && <Text>{car.daily_price} MRU/jour</Text>}
+            {showed_for != "admin" && (
+              <Text>
+                {car.daily_price} MRU/{t("jour")}
+              </Text>
+            )}
             {showed_for == "admin" && <Text>{car.rental.user.name}</Text>}
           </HStack>
         </CardBody>

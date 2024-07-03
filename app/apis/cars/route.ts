@@ -3,28 +3,6 @@ import z from "zod";
 import prisma from "@/prisma/client";
 import { carSchema } from "@/app/schemas";
 
-// export const carSchema = z.object({
-//   model: z.string().min(1, "Model name is required."),
-//   brand: z.string().min(1, "Brand name is required."),
-//   gearBox: z.string().min(1, "Gearbox type is required."),
-//   fuel: z.string().min(1, "Fuel type is required."),
-//   status: z
-//     .enum(["VERIFIED", "IN_PROGRESS", "NOT_VERIFIED", "BLOCKED", "COMPLETED", "RENTED"])
-//     .optional(),
-//   main_image_url: z.string().url("Main image is required."),
-//   image1_url: z.string().optional(),
-//   image2_url: z.string().optional(),
-//   silenders: z.number().int().min(1, "Sylinder count must be at least 1."),
-//   color: z.string().min(1, "Car color is required."),
-//   year: z
-//     .number()
-//     .int()
-//     .min(1900, "Year must be after 1900.")
-//     .max(new Date().getFullYear(), "Year cannot be in the future."),
-//   daily_price: z.number().min(0, "Daily price must be a non-negative number."),
-//   rentalId: z.number().int().min(0, "Rental ID is required."),
-// });
-
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const validation = carSchema.safeParse(body);

@@ -6,10 +6,12 @@
     "Add car": "Ajouter une voiture",
     "Users": "Utilisateurs",
     "Dashboard": "Dashboard",
-    "Hitory": "Historique",
+    "History": "Historique",
     "Current": "Actuel",
     "Top reserved cars": "Voitures les plus réservées",
-    "Top rented cars": "Voitures les plus louées"
+    "Top rented cars": "Voitures les plus louées",
+    "jour": "jour",
+    "Boit Vitess": "Boit Vit"
   },
   "LocaleSwitcher": {
     "fr": "français",

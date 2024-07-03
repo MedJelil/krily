@@ -74,9 +74,9 @@ export interface Car {
   year: number;
   daily_price: number;
   rentalId: number;
+  rental: Rental;
   createdAt: string | Date; // ISO 8601 date string
   updatedAt: string | Date; // ISO 8601 date string
-  rental: Rental;
 }
 
 export interface HistoryInterface {

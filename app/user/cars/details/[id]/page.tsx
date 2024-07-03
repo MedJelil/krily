@@ -2,12 +2,12 @@
 
 import CarDetails from "@/app/components/CarDetails";
 import { UseCurrentUser } from "@/app/hooks/useCurrentUser";
-import { CarData } from "@/app/rental/cars/edit/[id]/page";
+import { Car } from "@/app/interfaces";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const page = ({ params }: { params: { id: string } }) => {
-  const [car, setCar] = useState<CarData>();
+  const [car, setCar] = useState<Car>();
   const [error, setError] = useState(null);
   const [clientId, setClientId] = useState();
   const user = UseCurrentUser();

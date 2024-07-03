@@ -63,7 +63,7 @@ export default function withAction() {
     { name: t("Cars"), link: "/rental/cars" },
     { name: t("Add car"), link: "/rental/cars/new" },
     { name: t("Requests"), link: "/rental/requests" },
-    { name: t("Hitory"), link: "/rental/history" },
+    { name: t("History"), link: "/rental/history" },
     { name: t("Current"), link: "/rental/current" },
   ];
 

@@ -11,6 +11,13 @@ export async function GET(
 ) {
   const car = await prisma.car.findUnique({
     where: { id: Number(params.id) },
+    include: {
+      rental: {
+        include: {
+          user: true,
+        },
+      },
+    },
   });
 
   if (!car) {

@@ -2,15 +2,20 @@
 
 import CarDetails from "@/app/components/CarDetails";
 import Loader from "@/app/components/Loader";
-import { CarData } from "@/app/rental/cars/edit/[id]/page";
-import { Alert, AlertDescription, AlertIcon, AlertTitle } from "@chakra-ui/react";
+import { Car } from "@/app/interfaces";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+} from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const page = ({ params }: { params: { id: string } }) => {
-  const [car, setCar] = useState<CarData>();
+  const [car, setCar] = useState<Car>();
   const [error, setError] = useState(null);
-  
+
   useEffect(() => {
     const fetchCar = async () => {
       try {

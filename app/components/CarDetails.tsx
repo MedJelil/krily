@@ -7,19 +7,33 @@ import {
   Heading,
   SimpleGrid,
   HStack,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
 } from "@chakra-ui/react";
-import { CarData } from "../rental/cars/edit/[id]/page";
+// import { CarData } from "../rental/cars/edit/[id]/page";
 import EditButton from "./EditButton";
 import DeleteButton from "./DeleteButton";
 import PopupForm from "./PopupForm";
 import RentalPopup from "./RentalPopup";
 import AdminActions from "./AdminActions";
+import { Car } from "../interfaces";
 
 interface Props {
-  car: CarData;
+  car: Car;
   showed_for: string;
   clientId?: number;
 }
+
+const statusColors: { [key: string]: string } = {
+  BLOCKED: "red",
+  IN_PROGRESS: "yellowgreen",
+  NOT_VERIFIED: "gray",
+  VERIFIED: "blue",
+};
 
 const CarDetails = ({ car, showed_for, clientId }: Props) => {
   return (
@@ -27,7 +41,9 @@ const CarDetails = ({ car, showed_for, clientId }: Props) => {
       <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4}>
         <HStack justifyContent={"space-between"} alignItems={"center"}>
           <Heading mb={4} alignItems={"center"}>
-            <span className="capitalize">{car.model} </span>
+            <span className="capitalize">
+              {car.model} {car.year}
+            </span>
           </Heading>
           {showed_for == "rental" && (
             <HStack alignItems={"center"}>
@@ -58,40 +74,72 @@ const CarDetails = ({ car, showed_for, clientId }: Props) => {
           />
         </Box>
         <VStack align="center" spacing={4}>
-          <HStack justifyContent={"space-between"} gap={2}>
-            <Text>Brand: {car.brand}</Text>
-            <Text>Color: {car.color}</Text>
-            <Text>Year: {car.year}</Text>
-          </HStack>
-          <HStack justifyContent={"space-between"} gap={2}>
-            <Text>Daily Price: ${car.daily_price.toFixed(2)}</Text>
-            <Text>Gear Box: {car.gearBox}</Text>
-            <Text>Fuel: {car.fuel}</Text>
-          </HStack>
-          <HStack justifyContent={"space-between"} gap={2}>
-            <Text>Silenders: {car.silenders}</Text>
-            {showed_for == "rental" && (
-              <Box>
-                Status:{" "}
-                <Text
-                  display={"inline"}
-                  bg={
-                    car.status == "BLOCKED"
-                      ? "red"
-                      : car.status == "IN_PROGRESS"
-                      ? "yellowgreen"
-                      : car.status == "NOT_VERIFIED"
-                      ? "gray"
-                      : "blue"
-                  }
-                  borderRadius="lg"
-                  p={1}
-                >
-                  {car.status}
-                </Text>
-              </Box>
-            )}
-          </HStack>
+          <Table variant="simple">
+            <Thead>
+              <Tr>
+                <Th>Attribute</Th>
+                <Th>Value</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              <Tr>
+                <Td>Brand</Td>
+                <Td>{car.brand}</Td>
+              </Tr>
+              <Tr>
+                <Td>Color</Td>
+                <Td>{car.color}</Td>
+              </Tr>
+
+              <Tr>
+                <Td>Gear Box</Td>
+                <Td>{car.gearBox}</Td>
+              </Tr>
+              <Tr>
+                <Td>Fuel</Td>
+                <Td>{car.fuel}</Td>
+              </Tr>
+              <Tr>
+                <Td>Silenders</Td>
+                <Td>{car.silenders}</Td>
+              </Tr>
+              <Tr>
+                <Td>Daily Price</Td>
+                <Td>${car.daily_price.toFixed(2)}</Td>
+              </Tr>
+              {showed_for != "rental" && (
+                <>
+                  <Tr>
+                    <Td>rental</Td>
+                    <Td>{car.rental.user.name}</Td>
+                  </Tr>
+                  <Tr>
+                    <Td>rental telephone</Td>
+                    <Td>{car.rental.user.phoneNumber}</Td>
+                  </Tr>
+                  <Tr>
+                    <Td>rental location</Td>
+                    <Td>{car.rental.location}</Td>
+                  </Tr>
+                </>
+              )}
+              {showed_for == "rental" && (
+                <Tr>
+                  <Td>Status</Td>
+                  <Td>
+                    <Text
+                      display={"inline"}
+                      bg={statusColors[car.status]}
+                      borderRadius="lg"
+                      p={1}
+                    >
+                      {car.status}
+                    </Text>
+                  </Td>
+                </Tr>
+              )}
+            </Tbody>
+          </Table>
           <SimpleGrid columns={2} spacing={4}>
             {car.image1_url && (
               <Box>
