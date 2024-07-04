@@ -1,8 +1,11 @@
 "use client";
 import {
+  Alert,
+  AlertIcon,
   Button,
   FormControl,
   FormLabel,
+  Heading,
   Input,
   Modal,
   ModalBody,
@@ -11,11 +14,12 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Stack,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import axios from "axios";
@@ -39,8 +43,15 @@ interface Props {
   clientId: number;
 }
 
+interface Reservation {
+  rental_date: Date | string;
+  end_reservation_date: Date | string;
+}
+
 const RentalPopup = ({ carId, clientId }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [reservedCar, setReservedCar] = useState<Reservation[]>([]);
+  const [rentedCar, setRentedCar] = useState<Reservation[]>([]);
 
   const initialRef = useRef(null);
   const finalRef = useRef(null);
@@ -67,36 +78,68 @@ const RentalPopup = ({ carId, clientId }: Props) => {
     resolver: zodResolver(reservedCarSchema),
   });
 
+  const isAvailable = (selectedDate: string): boolean => {
+    if (reservedCar.length === 0) return true;
+    const selectedDateObj = new Date(selectedDate);
+    for (var i = 0; i < reservedCar.length; i++) {
+      const reservationDateObj = new Date(reservedCar[i].rental_date);
+      const endReservationDateObj = new Date(
+        reservedCar[i].end_reservation_date
+      );
+      if (
+        selectedDateObj >= reservationDateObj &&
+        selectedDateObj < endReservationDateObj
+      )
+        return false;
+    }
+    return true;
+  };
+
   const onSubmit = async (data: FieldValues) => {
-    // if (user)
-    try {
-      const result = await axios.post("/apis/rentedCars", {
-        ...data,
-        clientId: clientId,
-        carId: carId,
-      });
-      if (result) {
-        const showToast = () =>
-          toast({
-            title: "request sent",
-            description: "your reservation has been reserved please wait ",
-            status: "success",
-            duration: 9000,
-            isClosable: true,
-          });
-        router.push("/user/requests");
-        showToast();
-      }
-    } catch (error) {
+    if (
+      !isAvailable(new Date().toString()) ||
+      !isAvailable(end_reservation_date(new Date().toString(), data.days)) ||
+      rentedCar
+    ) {
       const showToast = () =>
         toast({
-          title: "error loading",
-          description: "something went wrong",
-          status: "error",
+          title: "this car is not available at this time",
+          description: "",
+          status: "warning",
           duration: 9000,
           isClosable: true,
         });
       showToast();
+    } else {
+      try {
+        const result = await axios.post("/apis/rentedCars", {
+          ...data,
+          clientId: clientId,
+          carId: carId,
+        });
+        if (result) {
+          const showToast = () =>
+            toast({
+              title: "request sent",
+              description: "your reservation has been reserved please wait ",
+              status: "success",
+              duration: 9000,
+              isClosable: true,
+            });
+          router.push("/user/requests");
+          showToast();
+        }
+      } catch (error) {
+        const showToast = () =>
+          toast({
+            title: "error loading",
+            description: "something went wrong",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        showToast();
+      }
     }
     // console.log({
     //   ...data,
@@ -106,6 +149,36 @@ const RentalPopup = ({ carId, clientId }: Props) => {
     //   carId: carId,
     // });
   };
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const response = await axios.get(
+          `/apis/currentReservationsByCar/${carId}`
+        ); // Modify the URL as needed
+        setReservedCar(response.data); // Axios wraps the response data in a `data` object
+      } catch (err) {
+        // setError(err.message);
+      }
+    };
+
+    const fetchRentedCars = async () => {
+      try {
+        const response = await axios.get(
+          `/apis/currentRentedcarsByCar/${carId}`
+        ); // Modify the URL as needed
+        setRentedCar(response.data); // Axios wraps the response data in a `data` object
+      } catch (err) {
+        // setError(err.message);
+      }
+    };
+
+    fetchRentedCars();
+
+    fetchCars();
+  }, []);
+
+  const allBusyTime = rentedCar.concat(reservedCar);
 
   return (
     <>
@@ -121,6 +194,26 @@ const RentalPopup = ({ carId, clientId }: Props) => {
         <ModalContent>
           <ModalHeader>Confirm your renting</ModalHeader>
           <ModalCloseButton />
+          {allBusyTime && (
+            <Stack spacing={3}>
+              <Heading as="h4" size="md" ml={6}>
+                This car busy at :
+              </Heading>
+              {allBusyTime.map((reservation) => (
+                <Alert status="warning">
+                  <AlertIcon />
+                  {new Date(reservation.rental_date).toLocaleDateString()}{" "}
+                  {new Date(reservation.rental_date).toLocaleTimeString()} to{" "}
+                  {new Date(
+                    reservation.end_reservation_date
+                  ).toLocaleDateString()}{" "}
+                  {new Date(
+                    reservation.end_reservation_date
+                  ).toLocaleTimeString()}
+                </Alert>
+              ))}
+            </Stack>
+          )}
           <form onSubmit={handleSubmit(onSubmit)}>
             <ModalBody pb={6}>
               <FormControl mt={4}>
