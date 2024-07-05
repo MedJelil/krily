@@ -13,6 +13,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String
+  user User[]
+}
+
 model User {
   id          Int     @id @default(autoincrement())
   name        String
@@ -23,12 +29,6 @@ model User {
   admin       Admin?
   rental      Rental?
   client      Client?
-}
-
-model Role {
-  id   Int    @id @default(autoincrement())
-  name String
-  user User[]
 }
 
 model Admin {
