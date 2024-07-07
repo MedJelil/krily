@@ -100,7 +100,7 @@ const PopupForm = ({ carId, clientId }: Props) => {
     if (
       !isAvailable(formatDateTime(data.rental_date)) ||
       !isAvailable(end_reservation_date(data.rental_date, data.days)) ||
-      rentedCar
+      rentedCar.length > 0
     ) {
       const showToast = () =>
         toast({

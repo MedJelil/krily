@@ -1,7 +1,6 @@
 "use client";
 import { PiSignOutBold } from "react-icons/pi";
 import { ReactNode, useEffect, useState } from "react";
-import { LiaSignOutAltSolid } from "react-icons/lia";
 
 import {
   Box,
@@ -11,6 +10,7 @@ import {
   IconButton,
   Button,
   Menu,
+  Image,
   MenuButton,
   MenuList,
   MenuItem,
@@ -102,7 +102,15 @@ export default function withAction() {
           {/* // )} */}
           <HStack spacing={8} alignItems={"center"}>
             <>
-              <Box>Logo</Box>
+              <Box>
+                <Image
+                  alt="Logo"
+                  src={
+                    "https://res.cloudinary.com/de8he2kd8/image/upload/v1720171599/krily-logo-v2_ljre9b.png"
+                  }
+                  className="w-20 h-10"
+                ></Image>
+              </Box>
               <HStack
                 as={"nav"}
                 spacing={4}

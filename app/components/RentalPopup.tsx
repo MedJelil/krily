@@ -99,8 +99,9 @@ const RentalPopup = ({ carId, clientId }: Props) => {
     if (
       !isAvailable(new Date().toString()) ||
       !isAvailable(end_reservation_date(new Date().toString(), data.days)) ||
-      rentedCar
+      rentedCar.length > 0
     ) {
+      end_reservation_date(new Date().toString(), data.days);
       const showToast = () =>
         toast({
           title: "this car is not available at this time",

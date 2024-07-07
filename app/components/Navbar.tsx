@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode, useEffect, useState } from "react";
+import logo from "../assets/krily-logo-v2.png";
 import {
   Box,
   Flex,
@@ -15,6 +16,7 @@ import {
   MenuDivider,
   useDisclosure,
   useColorModeValue,
+  Image,
   Stack,
   useColorMode,
 } from "@chakra-ui/react";
@@ -27,6 +29,7 @@ import axios from "axios";
 import { PiSignOutBold } from "react-icons/pi";
 import LocaleSwitcher from "./LocaleSwitcher";
 import { useTranslations } from "next-intl";
+// import Image from "next/image";
 
 const NavLink = ({
   children,
@@ -97,7 +100,15 @@ export default function withAction() {
           />
           <HStack spacing={8} alignItems={"center"}>
             <>
-              <Box>Logo</Box>
+              <Box>
+                <Image
+                  alt="Logo"
+                  src={
+                    "https://res.cloudinary.com/de8he2kd8/image/upload/v1720171599/krily-logo-v2_ljre9b.png"
+                  }
+                  className="w-20 h-10"
+                ></Image>
+              </Box>
               <HStack
                 as={"nav"}
                 spacing={4}
